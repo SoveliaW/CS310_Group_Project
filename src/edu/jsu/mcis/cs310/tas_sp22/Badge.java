@@ -4,6 +4,7 @@ import java.sql.Connection;
 
 
 
+
 public class Badge {
     private String id,description;
     
