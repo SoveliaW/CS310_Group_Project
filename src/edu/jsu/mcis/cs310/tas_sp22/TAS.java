@@ -7,9 +7,7 @@ public class TAS {
 
     public static void main (String[] args) throws SQLException {
         
-        Database db = new Database();
-        
-        
+        TASDatabase db = new TASDatabase("tasuser", "PASSWORD", "localhost");
         
         if (db.isConnected()){
             
