@@ -2,8 +2,8 @@ package edu.jsu.mcis.cs310.tas_sp22;
 import java.sql.*;
 import java.sql.Connection;
 
-//Sovelia was here
-//Sovelia was here2.0
+
+
 
 public class Badge {
     private String id,description;
@@ -21,8 +21,9 @@ public class Badge {
     public String getDescription() {
         return description;
     }
+    
     @Override
-    public String ToString(){
-        return "0";
+    public String toString(){
+        return (id + " " + description);
     }
 }
