@@ -12,8 +12,8 @@ public class TAS {
         if (db.isConnected()){
             
             System.err.println("Connected Successfully!");
-
-            
+            String results = db.getShift(1);
+            System.out.println(results);
         }
 }
 }

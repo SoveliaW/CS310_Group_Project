@@ -3,6 +3,14 @@ import java.sql.*;
 import java.sql.Connection;
 
 
+
 public class Shift {
-    private int LunchDuration,ShiftDuration;
+    private double LunchDuration,ShiftDuration, ShiftStart,ShiftStop;
+    private String Description, Shift;
+    private int id;
+       
+   public Shift(int id){
+    this.id = id;
+    
+}
 }

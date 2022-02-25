@@ -7,11 +7,17 @@ import java.sql.Connection;
 public class Punch {
    private String AdjustmentType; 
    private int TerminalId;
-    private int PunchTypeId;
+   private int PunchTypeId;
+   private Badge badge;
 
   public Punch(int TerminalId, Badge badge, int PunchTypeId){
       this.PunchTypeId = PunchTypeId;
       this.TerminalId = TerminalId;
+      this.badge = badge;
+    }
+
+    public Badge getBadge() {
+        return badge;
     }
 
     public int getTerminalId() {
