@@ -22,6 +22,7 @@ public class TASDatabase {
          PreparedStatement pstmt = connection.prepareStatement(query);
          pstmt.setInt(1,id);
          boolean pstmtExe = pstmt.execute();
+         
          if(pstmtExe){
             ResultSet resultset = pstmt.getResultSet(); 
              results = getResultSetAsJSON((ResultSet)resultset);
@@ -40,6 +41,7 @@ public class TASDatabase {
          PreparedStatement pstmt = connection.prepareStatement(query);
          pstmt.setInt(1,id);
         boolean pstmtExe = pstmt.execute();
+        
          if(pstmtExe){
              ResultSet resultset = pstmt.getResultSet();
              results = getResultSetAsJSON((ResultSet)resultset);
@@ -57,6 +59,7 @@ public class TASDatabase {
          PreparedStatement pstmt = connection.prepareStatement(query);
          pstmt.setString(1,id);
          boolean pstmtExe = pstmt.execute();
+         
          if(pstmtExe){
              ResultSet resultset = pstmt.getResultSet();
              results = getResultSetAsJSON((ResultSet)resultset);
