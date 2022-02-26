@@ -24,7 +24,7 @@ public class TASDatabase {
         
         ArrayList<String> Hash = new ArrayList<String>();
         ArrayList<String> keys = new ArrayList<String>();
-        HashMap <String, String> empl;
+        HashMap <String, String> empl = null;
         try{
          String query= "SELECT * FROM tas_sp22_v1.employee WHERE id =?;";
          PreparedStatement pstmt = connection.prepareStatement(query);
