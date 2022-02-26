@@ -27,3 +27,4 @@ public class Badge {
         return (id + " " + description);
     }
 }
+
