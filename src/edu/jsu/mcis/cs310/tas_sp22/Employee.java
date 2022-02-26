@@ -5,52 +5,32 @@ import java.sql.Connection;
 import java.util.HashMap;
 
 public class Employee {
-    private int id,empltype,deptid;
-    private String badgeid,fname,mname,lname;
-    HashMap <String, String> param_copy;
+    private String id,badgeid,fname,mname,lname,empltype,deptid,shiftid,active,inactive;
+    HashMap <String, String> empl_copy;
     
-    public Employee(HashMap <String, String> param){
-        param.put("Id", Integer.toString(id));
-        param.put("Badge Id", badgeid);
-        param.put("First Name", fname);
-        param.put("Middle Name", mname);
-        param.put("Last Name", lname);
-        param.put("Employee Type Id", Integer.toString(empltype));
-        param.put("Department Id", Integer.toString(deptid));
-        this.param_copy = param;
+    public Employee(HashMap <String, String> empl){
+        this.id = empl.get("Id");
+        this.badgeid = empl.get("Badge Id");
+        this.fname = empl.get("First Name");
+        this.mname = empl.get("Middle Name");
+        this.lname = empl.get("Last Name");
+        this.empltype = empl.get("Employee Type Id");
+        this.deptid = empl.get("Department Id");
+        this.shiftid = empl.get("Shift Id");
+        this.active = empl.get("Active");
+        this.inactive = empl.get("Inactive");
+        
+        this.empl_copy = empl;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public int getEmpltype() {
-        return empltype;
-    }
-
-    public int getDeptid() {
-        return deptid;
-    }
-
-    public String getBadgeid() {
-        return badgeid;
-    }
-
-    public String getFname() {
-        return fname;
-    }
-
-    public String getMname() {
-        return mname;
-    }
-
-    public String getLname() {
-        return lname;
-    }
-
+    
     @Override
     public String toString() {
-        return param_copy.toString();   //HashMap to String
+        StringBuilder s = new StringBuilder();
+        s.append("#").append(badgeid).append(" (").append(lname).append(", ");
+        s.append(fname).append(" ").append(mname).append("): ").append("employeetypeid: ");
+        s.append(empltype).append(", departmentid: ").append(deptid).append(", shiftid: ");
+        s.append(shiftid).append(", active: ").append(active).append(", inactive: ").append(inactive);
+        return s.toString();
     }
     
     
