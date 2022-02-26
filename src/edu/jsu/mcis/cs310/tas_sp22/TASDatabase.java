@@ -17,6 +17,7 @@ public class TASDatabase {
     }
     String results =null;
     public String getEmployee(int id) {
+        
         try{
          String query= "SELECT * FROM tas_sp22_v1.employee WHERE id =?;";
          PreparedStatement pstmt = connection.prepareStatement(query);
@@ -24,9 +25,11 @@ public class TASDatabase {
          boolean pstmtExe = pstmt.execute();
          if(pstmtExe){
             ResultSet resultset = pstmt.getResultSet(); 
-             results = getResultSetAsJSON((ResultSet)resultset);
-             
-             
+              
+            while(resultset.next()){
+                
+            }
+                
          }
         }
         catch(Exception e) {
