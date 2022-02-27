@@ -13,7 +13,7 @@ public class TAS {
             
             System.err.println("Connected Successfully!");
 
-            String results = db.getShift(1);
+            String results = db.getEmployee(11);
             System.out.println(results);
 
             

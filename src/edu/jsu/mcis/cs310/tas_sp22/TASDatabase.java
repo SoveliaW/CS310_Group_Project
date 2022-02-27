@@ -22,9 +22,9 @@ public class TASDatabase {
     String results =null;
     public String getEmployee(int id) {
         
-        ArrayList<String> Hash = new ArrayList<String>();
+        
         ArrayList<String> keys = new ArrayList<String>();
-        HashMap <String, String> empl;
+        HashMap <String, String> empl =new HashMap <>() ;
         try{
          String query= "SELECT * FROM tas_sp22_v1.employee WHERE id =?;";
          PreparedStatement pstmt = connection.prepareStatement(query);
@@ -55,9 +55,13 @@ public class TASDatabase {
         catch(Exception e) {
          e.printStackTrace(); 
         }
-        return results.toString();
+        Employee hmap = new Employee(empl);
+        return empl.toString();
     } 
     public String getShift(int id) {
+       
+        ArrayList<String> keys = new ArrayList<String>();
+        HashMap <String, String> shif =new HashMap <>() ;
         try{
          String query= "Select *FROM shift WHERE id = ?;";
          PreparedStatement pstmt = connection.prepareStatement(query);
@@ -65,31 +69,31 @@ public class TASDatabase {
         boolean pstmtExe = pstmt.execute();
         
          if(pstmtExe){
-             ResultSet resultset = pstmt.getResultSet();
-             
-         }
+            ResultSet resultset = pstmt.getResultSet(); 
+              
+            while(resultset.next()){
+                ResultSetMetaData metadata = resultset.getMetaData();
+                
+                int columnCount = metadata.getColumnCount();
+            
+                    for (int i = 1; i <= columnCount; ++i) {
+
+                    keys.add(metadata.getColumnLabel(i));
+                   
+                    }
+                     for (int i = 1; i <= columnCount; ++i) {
+                  
+                    Object value = resultset.getObject(i);
+                    shif.put(keys.get(i - 1), String.valueOf(value));
+                    }  
+                }
+            }
         }
         catch(Exception e) {
          e.printStackTrace(); 
         }
-        return results.toString();
-        }
-    public String getBadge(String id) {
-        try{
-         String query= "SELECT * FROM tas_sp22_v1.badge WHERE id =?;";
-         PreparedStatement pstmt = connection.prepareStatement(query);
-         pstmt.setString(1,id);
-         boolean pstmtExe = pstmt.execute();
-         
-         if(pstmtExe){
-             ResultSet resultset = pstmt.getResultSet();
-          
-         }
-        }
-        catch(Exception e) {
-         e.printStackTrace(); 
-        }
-        return results.toString();
+        Shift hmap = new Shift(shif);
+        return shif.toString();
         }
     
     public boolean isConnected() {

@@ -9,16 +9,16 @@ public class Employee {
     HashMap <String, String> empl_copy;
     
     public Employee(HashMap <String, String> empl){
-        this.id = empl.get("Id");
-        this.badgeid = empl.get("Badge Id");
-        this.fname = empl.get("First Name");
-        this.mname = empl.get("Middle Name");
-        this.lname = empl.get("Last Name");
-        this.empltype = empl.get("Employee Type Id");
-        this.deptid = empl.get("Department Id");
-        this.shiftid = empl.get("Shift Id");
-        this.active = empl.get("Active");
-        this.inactive = empl.get("Inactive");
+        this.id = empl.get("id");
+        this.badgeid = empl.get("badgeid");
+        this.fname = empl.get("firstname");
+        this.mname = empl.get("middlename");
+        this.lname = empl.get("lastname");
+        this.empltype = empl.get("employeetypeid");
+        this.deptid = empl.get("departmentid");
+        this.shiftid = empl.get("shiftid");
+        this.active = empl.get("active");
+        this.inactive = empl.get("inactive");
         
         this.empl_copy = empl;
     }
