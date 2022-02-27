@@ -12,10 +12,12 @@ public class TAS {
         if (db.isConnected()){
             
             System.err.println("Connected Successfully!");
+            
+            Badge b1 = db.getBadge("1B2052DE");
 
-            String results = db.getEmployee(11);
+            Employee results = db.getEmployee(b1);
             System.out.println(results);
-
+            
             
             }
 

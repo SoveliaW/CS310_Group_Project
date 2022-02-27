@@ -20,15 +20,40 @@ public class TASDatabase {
         
     }
     String results =null;
-    public String getEmployee(int id) {
+    
+    
+    public Badge getBadge(String badgeid) {
+        String id = null, des = null;
+        Badge result = new Badge(id, des);
+
+        try {
+            String query = "SELECT * FROM tas_sp22_v1.badge WHERE id = ?;";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, badgeid);
+            
+            boolean ptExe = pstmt.execute();
+            
+            if (ptExe) {
+                ResultSet resultset = pstmt.executeQuery();
+                
+                while(resultset.next()){
+                    id = resultset.getString(1);
+                    des = resultset.getString(2);
+                }
+            
+
+            }
+        }
+        catch (Exception e) { e.printStackTrace(); }
         
-        
+        return result;
+    } 
+    
+    
+    public Employee getEmployee(int id) {       //getEmployee that takes an int id as a parameter
         ArrayList<String> keys = new ArrayList<String>();
-<<<<<<< HEAD
-        HashMap <String, String> empl =new HashMap <>() ;
-=======
-        HashMap <String, String> empl = null;
->>>>>>> 8b8aeae29647668f56dee73c9b0581bd39ce4214
+        HashMap <String, String> empl = new HashMap <>() ;
+
         try{
          String query= "SELECT * FROM tas_sp22_v1.employee WHERE id =?;";
          PreparedStatement pstmt = connection.prepareStatement(query);
@@ -60,12 +85,55 @@ public class TASDatabase {
          e.printStackTrace(); 
         }
         Employee hmap = new Employee(empl);
-        return empl.toString();
+        return hmap;
     } 
-    public String getShift(int id) {
+    
+    public Employee getEmployee(Badge badge_id) {       //getEmployee that takes a Badge id as a parameter
+        ArrayList<String> keys = new ArrayList<String>();
+        HashMap <String, String> empl = new HashMap <>() ;
+        String id = badge_id.getId();
+
+        try{
+         String query= "SELECT * FROM tas_sp22_v1.employee WHERE id =?;";
+         PreparedStatement pstmt = connection.prepareStatement(query);
+         pstmt.setString(1,id);
+         boolean pstmtExe = pstmt.execute();
+         
+         if(pstmtExe){
+            ResultSet resultset = pstmt.getResultSet(); 
+              
+            while(resultset.next()){
+                ResultSetMetaData metadata = resultset.getMetaData();
+                
+                int columnCount = metadata.getColumnCount();
+            
+                    for (int i = 1; i <= columnCount; ++i) {
+
+                    keys.add(metadata.getColumnLabel(i));
+                   
+                    }
+                     for (int i = 1; i <= columnCount; ++i) {
+                  
+                    Object value = resultset.getObject(i);
+                    empl.put(keys.get(i - 1), String.valueOf(value));
+                    }  
+                }
+            }
+        }
+        catch(Exception e) {
+         e.printStackTrace(); 
+        }
+        Employee hmap = new Employee(empl);
+        return hmap;
+    } 
+    
+    
+    
+    public Shift getShift(int id) {       //getShift that takes an int id as a parameter
        
         ArrayList<String> keys = new ArrayList<String>();
         HashMap <String, String> shif =new HashMap <>() ;
+        
         try{
          String query= "Select *FROM shift WHERE id = ?;";
          PreparedStatement pstmt = connection.prepareStatement(query);
@@ -97,8 +165,50 @@ public class TASDatabase {
          e.printStackTrace(); 
         }
         Shift hmap = new Shift(shif);
-        return shif.toString();
+        return hmap;
         }
+    
+    public Shift getShift(Badge badge_id) {       //getShift that takes a Badge id as a parameter
+       
+        ArrayList<String> keys = new ArrayList<String>();
+        HashMap <String, String> shif =new HashMap <>() ;
+        int id = Integer.parseInt(badge_id.getId());
+        
+        try{
+         String query= "Select *FROM shift WHERE id = ?;";
+         PreparedStatement pstmt = connection.prepareStatement(query);
+         pstmt.setInt(1,id);
+        boolean pstmtExe = pstmt.execute();
+        
+         if(pstmtExe){
+            ResultSet resultset = pstmt.getResultSet(); 
+              
+            while(resultset.next()){
+                ResultSetMetaData metadata = resultset.getMetaData();
+                
+                int columnCount = metadata.getColumnCount();
+            
+                    for (int i = 1; i <= columnCount; ++i) {
+
+                    keys.add(metadata.getColumnLabel(i));
+                   
+                    }
+                     for (int i = 1; i <= columnCount; ++i) {
+                  
+                    Object value = resultset.getObject(i);
+                    shif.put(keys.get(i - 1), String.valueOf(value));
+                    }  
+                }
+            }
+        }
+        catch(Exception e) {
+         e.printStackTrace(); 
+        }
+        Shift hmap = new Shift(shif);
+        return hmap;
+        }
+    
+    
     
     public boolean isConnected() {
 
