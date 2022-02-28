@@ -44,7 +44,7 @@ public class TASDatabase {
         return result;
     } 
     
-    
+
     public Employee getEmployee(int id) {       //getEmployee that takes an int id as a parameter
         ArrayList<String> keys = new ArrayList<String>();
         HashMap <String, String> empl = new HashMap <>() ;
@@ -88,7 +88,7 @@ public class TASDatabase {
             String query = "SELECT * FROM tas_sp22_v1.employee WHERE id = ?;";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, id);
-            
+
             boolean ptExe = pstmt.execute();
             
             if (ptExe) {
@@ -97,16 +97,16 @@ public class TASDatabase {
                 while(resultset.next()){
                     id = resultset.getString(2);
                     id_int = resultset.getInt(1);
+                    }
+                  
+                    }  
                 }
-
-            }
-        }
         catch (Exception e) { e.printStackTrace(); }
         return getEmployee(id_int);
-    } 
-    
+        }
+        
             /* SHIFT */
-    
+         
     public Shift getShift(int id) {       //getShift that takes an int id as a parameter 
         ArrayList<String> keys = new ArrayList<String>();
         HashMap <String, String> shif =new HashMap <>() ;
