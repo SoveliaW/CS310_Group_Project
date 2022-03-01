@@ -27,9 +27,10 @@ public class Shift {
     @Override
        public String toString() {
          StringBuilder s = new StringBuilder();
-    
+        
+        
          s.append(description).append(":").append(" ").append(shiftstart).append(" - ");
-         s.append(shiftstop).append(" (").append("????????????").append(")").append("; ");
+         s.append(shiftstop).append(" (").append("??????????").append(")").append("; ");
          s.append(lunchstart).append(" - ").append(lunchstop).append(" (").append("????????????").append(")");
         return s.toString();
         }
