@@ -40,8 +40,6 @@ public class TASDatabase {
                     id = resultset.getString(1);
                     des = resultset.getString(2);
                 }
-            
-
             }
         }
         catch (Exception e) { e.printStackTrace(); }
@@ -162,9 +160,7 @@ public class TASDatabase {
         Punch hmap = new Punch(Pun);
         return hmap;
     } 
-    
-    
-    
+   
     public Shift getShift(int id) {       //getShift that takes an int id as a parameter
        
         ArrayList<String> keys = new ArrayList<String>();
