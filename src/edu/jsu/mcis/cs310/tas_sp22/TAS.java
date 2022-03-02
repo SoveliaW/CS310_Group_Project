@@ -13,17 +13,22 @@ public class TAS {
             
             System.err.println("Connected Successfully!");
             
-        Badge b1 = db.getBadge("1B2052DE");
-        Badge b2 = db.getBadge("0886BF12");
-        Badge b3 = db.getBadge("29C03912");
+        Badge b1 = db.getBadge("B6902696");
+        Badge b2 = db.getBadge("76E920D9");
+        Badge b3 = db.getBadge("4382D92D");
+        
 		
-        Employee e1 = db.getEmployee(b1);
-        Employee e2 = db.getEmployee(b2);
-        Employee e3 = db.getEmployee(b3);
-       
-        System.out.println("Em 1: " + e1.toString());
-        System.out.println("Em 2: " + e2.toString());
-        System.out.println("Em 3: " + e3.toString());
+        /* Retrieve Shift Rulesets from Database */
+
+        Shift s1 = db.getShift(b1);
+        Shift s2 = db.getShift(b2);
+        Shift s3 = db.getShift(b3);
+		
+        /* Compare to Expected Values */
+
+        System.out.println("Em 1: " + s1.toString());
+        System.out.println("Em 2: " + s2.toString());
+        System.out.println("Em 3: " + s3.toString());
             
             }
 

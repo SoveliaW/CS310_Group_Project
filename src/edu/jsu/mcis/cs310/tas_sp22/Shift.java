@@ -8,40 +8,40 @@ import java.util.HashMap;
 
 
 public class Shift {
-    private String id, description, shiftstart, shiftstop, roundinterval, 
-            graceperiod, dockpenalty, lunchstart, lunchstop, lunchthreshold;
-    private long shiftmin, lunchmin;
-    HashMap <String, String> Shift_copy;
+    
+    private String description;
+    private int roundinterval, graceperiod, dockpenalty, lunchthreshold, id;
+    private LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
     
         
-   public Shift(HashMap <String, String> shif){
+   public Shift(HashMap <String, String> params){
        
        
-        this.id = shif.get("id");
-        this.description = shif.get("description");
-        this.shiftstart = shif.get("shiftstart");
-        this.shiftstop = shif.get("shiftstop");
-        this.roundinterval = shif.get("roundinterval");
-        this.graceperiod = shif.get("graceperiod");
-        this.dockpenalty = shif.get("dockpenalty");
-        this.lunchstart = shif.get("lunchstart");
-        this.lunchstop = shif.get("lunchstop");
-        this.lunchthreshold = shif.get("lunchthreshold");
+        this.id = params.get("id");
+        this.description = params.get("description");
+        this.shiftstart = params.get("shiftstart");
+        this.shiftstop = params.get("shiftstop");
+        this.roundinterval = params.get("roundinterval");
+        this.graceperiod = params.get("graceperiod");
+        this.dockpenalty = params.get("dockpenalty");
+        this.lunchstart = params.get("lunchstart");
+        this.lunchstop = params.get("lunchstop");
+        this.lunchthreshold = params.get("lunchthreshold");
         
-        this.Shift_copy = shif;
+        this.Shift_copy = params;
         
         // Formatting the time for shift and lunch
         
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.mm");
         
         LocalTime sstart = LocalTime.parse(shiftstart);
-        shiftstart = sstart.toString();
+        this.shiftstart = sstart.toString();
         LocalTime sstop = LocalTime.parse(shiftstop);
-        shiftstop = sstop.toString();
+        this.shiftstop = sstop.toString();
         LocalTime lstart = LocalTime.parse(lunchstart);
-        lunchstart = lstart.toString();
+        this.lunchstart = lstart.toString();
         LocalTime lstop = LocalTime.parse(lunchstop);
-        lunchstop = lstop.toString();
+        this.lunchstop = lstop.toString();
         
         // The minutes between the shift start and stop
         this.shiftmin = java.time.Duration.between(sstart, sstop).toMinutes();

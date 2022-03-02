@@ -151,38 +151,41 @@ public class TASDatabase {
    
     public Shift getShift(int id) {       //getShift that takes an int id as a parameter
         ArrayList<String> keys = new ArrayList<String>();
-        HashMap <String, String> shif =new HashMap <>() ;
         
-        try{
-            String query= "Select *FROM shift WHERE id = ?;";
+        
+        try {
+            
+            String query= "Select * FROM shift WHERE id = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1,id);
+            pstmt.setInt(1, id);
             
             boolean pstmtExe = pstmt.execute();
-        
-        if(pstmtExe){
-            ResultSet resultset = pstmt.getResultSet(); 
-              
-            while(resultset.next()){
-                ResultSetMetaData metadata = resultset.getMetaData();
-                int columnCount = metadata.getColumnCount();
-            
-                    for (int i = 1; i <= columnCount; ++i) {
-                        keys.add(metadata.getColumnLabel(i));
-                    }
+
+            if (pstmtExe) {
+
+                ResultSet resultset = pstmt.getResultSet();
+
+                if(resultset.next()) {
+
+                    HashMap<String, String> params = new HashMap<>();
                     
-                    for (int i = 1; i <= columnCount; ++i) {
-                        Object value = resultset.getObject(i);
-                        shif.put(keys.get(i - 1), String.valueOf(value));
-                    }  
+                    params.put("description", resultset.getString("description"));
+                    
+                    params.put("id", String.valueOf(resultset.getInt("id")));
+                    
+                    resultset.getTime("shiftstart");
+
+                    Shift hmap = new Shift(params); 
+                    
                 }
+                
             }
+            
         }
         catch(Exception e) {
-         e.printStackTrace(); 
+            e.printStackTrace(); 
         }
         
-        Shift hmap = new Shift(shif);
         return hmap;
         }
     
@@ -191,18 +194,17 @@ public class TASDatabase {
         int id_int = 0;
 
         try {
-            String query = "SELECT * FROM employee WHERE badgeid = ?;";
+            String query = "SELECT * FROM employee WHERE badgeid = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, badgeid);
             
             boolean ptExe = pstmt.execute();
             
             if (ptExe) {
-                ResultSet resultset = pstmt.executeQuery();
+                ResultSet resultset = pstmt.getResultSet();
                 
-                while(resultset.next()){
-                    badgeid = resultset.getString(2);
-                    id_int = resultset.getInt(1);
+                if (resultset.next()){
+                    id_int = resultset.getInt("id");
                 }
             }
         }

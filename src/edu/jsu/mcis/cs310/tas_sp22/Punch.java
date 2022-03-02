@@ -24,29 +24,10 @@ public class Punch {
         this.Pun_copy = Pun;
     }
    
-   //Timestamp timestamp2 = new Timestamp(System.currentTimeMillis());
+   
    Timestamp timestamp2 = new Timestamp(new java.util.Date().getTime());
    
-   //Timestamp timestamp2 = rs.getTimestamp(columnIndex);
-   //System.out.println("timestamp: " + timestamp.toString());
    
-   //LocalDateTime local = timestamp2.toLocalDateTime();
-   //local = local.withSecond(0).withNano(0);
-   //java.sql.Timestamp ts3 = java.sql.Timestamp.valueOf(local);
-   
-
-   public enum PunchType {
-    CLOCK_OUT("CLOCK OUT"),
-    CLOCK_IN("CLOCK IN"),
-    TIME_OUT("TIME OUT");
-    private final String description;
-    private PunchType(String d) { description = d; }
-    @Override
-    public String toString() { return description; }
-}
-
-   
-
     public String getEventtypeid() {
         return eventtypeid;
     }
@@ -65,7 +46,9 @@ public class Punch {
         return TerminalId;
     }
 
-    public String getPunchTypeId() {
+    public String printOriginal() {
+         StringBuilder s = new StringBuilder();
+        
         return PunchTypeId;
     }
   
