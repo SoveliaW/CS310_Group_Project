@@ -93,7 +93,7 @@ public class TASDatabase {
         try {
             String query = "SELECT * FROM employee WHERE badgeid = ?;";
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(2, badgeid);
+            pstmt.setString(1, badgeid);
             
             boolean ptExe = pstmt.execute();
             
@@ -198,7 +198,7 @@ public class TASDatabase {
         try {
             String query = "SELECT * FROM employee WHERE badgeid = ?;";
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(2, badgeid);
+            pstmt.setString(1, badgeid);
             
             boolean ptExe = pstmt.execute();
             

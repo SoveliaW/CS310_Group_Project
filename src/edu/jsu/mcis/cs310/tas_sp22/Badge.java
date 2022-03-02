@@ -9,7 +9,7 @@ public class Badge {
     private String id,description;
     
     public Badge(String id,String description){
-        this.id =id;
+        this.id = id;
         this.description= description;
         
     }

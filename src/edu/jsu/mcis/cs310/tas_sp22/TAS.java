@@ -13,11 +13,17 @@ public class TAS {
             
             System.err.println("Connected Successfully!");
             
-            Badge b1 = db.getBadge("1B2052DE");
-
-            Employee results = db.getEmployee(b1);
-            System.out.println(results);
-            
+        Badge b1 = db.getBadge("1B2052DE");
+        Badge b2 = db.getBadge("0886BF12");
+        Badge b3 = db.getBadge("29C03912");
+		
+        Employee e1 = db.getEmployee(b1);
+        Employee e2 = db.getEmployee(b2);
+        Employee e3 = db.getEmployee(b3);
+       
+        System.out.println("Em 1: " + e1.toString());
+        System.out.println("Em 2: " + e2.toString());
+        System.out.println("Em 3: " + e3.toString());
             
             }
 

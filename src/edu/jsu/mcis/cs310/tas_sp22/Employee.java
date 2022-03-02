@@ -2,6 +2,8 @@ package edu.jsu.mcis.cs310.tas_sp22;
 
 import java.sql.*;
 import java.sql.Connection;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Employee {
@@ -21,6 +23,13 @@ public class Employee {
         this.inactive = empl.get("inactive");
         
         this.empl_copy = empl;
+        
+        active = active.substring(0, 10);
+        
+        if (inactive == "null") {
+            inactive = "none";
+        }
+        
     }
     
     @Override

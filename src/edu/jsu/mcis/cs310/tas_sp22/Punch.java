@@ -33,7 +33,7 @@ public class Punch {
    //LocalDateTime local = timestamp2.toLocalDateTime();
    //local = local.withSecond(0).withNano(0);
    //java.sql.Timestamp ts3 = java.sql.Timestamp.valueOf(local);
-
+   
 
    public enum PunchType {
     CLOCK_OUT("CLOCK OUT"),
