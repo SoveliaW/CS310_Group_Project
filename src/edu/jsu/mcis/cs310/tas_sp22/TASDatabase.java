@@ -48,7 +48,7 @@ public class TASDatabase {
         HashMap<String, String> params = new HashMap<>();
 
         try{
-         String query= "SELECT * FROM employee WHERE id = ?;";
+         String query= "SELECT * FROM employee WHERE id = ?";
          PreparedStatement pstmt = connection.prepareStatement(query);
          pstmt.setInt(1,id);
          
@@ -62,14 +62,13 @@ public class TASDatabase {
                 if(resultset.next()) {
                  params.put("id", String.valueOf(resultset.getInt("id")));
                  params.put("badgeid", resultset.getString("badgeid"));
-                 params.put("description", resultset.getString("description"));
                  params.put("firstname",resultset.getString("firstname"));
-                 params.put("lastname",resultset.getString("lasttname"));
+                 params.put("lastname",resultset.getString("lastname"));
                  params.put("middlename",resultset.getString("middlename"));
                  params.put("employeetypeid", String.valueOf(resultset.getInt("employeetypeid")));
                  params.put("departmentid", String.valueOf(resultset.getInt("departmentid")));
                  params.put("shiftid", String.valueOf(resultset.getInt("shiftid")));
-                 params.put("active",resultset.getTime("active").toString());
+                 params.put("active",resultset.getDate("active").toString());
                 }
             }
         }
@@ -86,7 +85,7 @@ public class TASDatabase {
         int id_int = 0;
 
         try {
-            String query = "SELECT * FROM employee WHERE badgeid = ?;";
+            String query = "SELECT * FROM employee WHERE badgeid = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, badgeid);
             
@@ -114,7 +113,7 @@ public class TASDatabase {
         HashMap<String, String> params = new HashMap<>();
         
         try{
-         String query= "SELECT * FROM tas_sp22_v1.event WHERE id =?;";
+         String query= "SELECT * FROM tas_sp22_v1.event WHERE id =?";
          PreparedStatement pstmt = connection.prepareStatement(query);
          pstmt.setInt(1,id);
          
@@ -124,7 +123,7 @@ public class TASDatabase {
                 
                 ResultSet resultset = pstmt.getResultSet();
 
-                if(resultset.next()) {
+                while(resultset.next()) {
                     
                     params.put("terminalId", resultset.getString("terminalId"));
                     params.put("eventtypeid",String.valueOf(resultset.getInt("eventtypeid")));
@@ -137,8 +136,8 @@ public class TASDatabase {
          e.printStackTrace(); 
         }
         
-     //Punch Results = new Punch(params,);// Needs another parma for punch constuctor 
-     Punch Results=null;
+     Punch Results = new Punch(params);
+     
      return Results;
     } 
     

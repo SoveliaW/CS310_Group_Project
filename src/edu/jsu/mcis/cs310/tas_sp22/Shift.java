@@ -7,12 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 
-
 public class Shift {
     
     private String description;
     private int roundinterval, graceperiod, dockpenalty, lunchthreshold, id;
-    private LocalDateTime shiftstart, shiftstop,lunchstart, lunchstop;
+    private LocalTime shiftstart, shiftstop,lunchstart, lunchstop;
     private long shiftmin,lunchmin;
     
         
@@ -21,13 +20,13 @@ public class Shift {
        
         this.id = Integer.parseInt(Results.get("id"));
         this.description = Results.get("description");
-        this.shiftstart = LocalDateTime.parse(Results.get("shiftstart"));
-        this.shiftstop = LocalDateTime.parse(Results.get("shiftstop"));
+        this.shiftstart = LocalTime.parse(Results.get("shiftstart"));
+        this.shiftstop = LocalTime.parse(Results.get("shiftstop"));
         this.roundinterval = Integer.parseInt(Results.get("roundinterval"));
         this.graceperiod = Integer.parseInt(Results.get("graceperiod"));
         this.dockpenalty = Integer.parseInt(Results.get("dockpenalty"));
-        this.lunchstart = LocalDateTime.parse(Results.get("lunchstart"));
-        this.lunchstop = LocalDateTime.parse(Results.get("lunchstop"));
+        this.lunchstart = LocalTime.parse(Results.get("lunchstart"));
+        this.lunchstop = LocalTime.parse(Results.get("lunchstop"));
         this.lunchthreshold = Integer.parseInt(Results.get("lunchthreshold"));
        
         // The minutes between the shift start and stop

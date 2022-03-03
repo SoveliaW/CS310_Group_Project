@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class Employee {
     private String badgeid,firstname,middlename,lastname,inactive;
     private int employeetypeid,deptid,shiftid,id;
-    private LocalDateTime active;
+    private LocalDate active;
     HashMap <String, String> empl_copy;
     
     public Employee(HashMap <String, String> Results){
@@ -19,8 +19,8 @@ public class Employee {
         this.employeetypeid = Integer.parseInt(Results.get("employeetypeid"));
         this.deptid = Integer.parseInt(Results.get("departmentid"));
         this.shiftid = Integer.parseInt(Results.get("shiftid"));
-        this.active = LocalDateTime.parse(Results.get("active"));
-        this.inactive = Results.get("inactive");
+        this.active = LocalDate.parse(Results.get("active"));
+        this.inactive = "none";
         
         this.empl_copy = Results;
         

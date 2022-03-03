@@ -12,24 +12,8 @@ public class TAS {
         if (db.isConnected()){
             
             System.err.println("Connected Successfully!");
-            
-        Badge b1 = db.getBadge("B6902696");
-        Badge b2 = db.getBadge("76E920D9");
-        Badge b3 = db.getBadge("4382D92D");
-        
-		
-        /* Retrieve Shift Rulesets from Database */
-
-        Shift s1 = db.getShift(b1);
-        Shift s2 = db.getShift(b2);
-        Shift s3 = db.getShift(b3);
-		
-        /* Compare to Expected Values */
-
-        System.out.println("Em 1: " + s1.toString());
-        System.out.println("Em 2: " + s2.toString());
-        System.out.println("Em 3: " + s3.toString());
-            
+            //Employee e1 = db.getEmployee(10);
+            //System.out.println(e1);
             }
 
         }

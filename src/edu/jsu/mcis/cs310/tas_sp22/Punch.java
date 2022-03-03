@@ -10,16 +10,16 @@ public class Punch {
    private PunchType PunchTypeid;
    private String badgeid,adjustmenttype;
    private LocalDateTime timestamp;
-   private Badge badge;
+   private Badge badge, emptybadge;
    HashMap <String, String> Pun_copy;
    
-   public Punch(HashMap <String, String> Results,Badge emptybadge){
+   public Punch(HashMap <String, String> Results){
         this.terminalid = Integer.parseInt(Results.get("terminalid"));
         this.PunchTypeid = PunchType.values()[Integer.parseInt(Results.get("eventtypeid"))];
         this.id=0;
         this.badgeid = null;
         this.adjustmenttype=null;
-        this.badge=emptybadge;
+        //this.badge=emptybadge;
         if (Results.get("timestamp")!=null){ // if no timestamp it is a new punch
             //so collect current date&time and use for punch
          this.timestamp=LocalDateTime.now();
