@@ -1,43 +1,44 @@
 package edu.jsu.mcis.cs310.tas_sp22;
 
-import java.sql.*;
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Employee {
-    private String id,badgeid,fname,mname,lname,empltype,deptid,shiftid,active,inactive;
+    private String badgeid,firstname,middlename,lastname,inactive;
+    private int employeetypeid,deptid,shiftid,id;
+    private LocalDateTime active;
     HashMap <String, String> empl_copy;
     
-    public Employee(HashMap <String, String> empl){
-        this.id = empl.get("id");
-        this.badgeid = empl.get("badgeid");
-        this.fname = empl.get("firstname");
-        this.mname = empl.get("middlename");
-        this.lname = empl.get("lastname");
-        this.empltype = empl.get("employeetypeid");
-        this.deptid = empl.get("departmentid");
-        this.shiftid = empl.get("shiftid");
-        this.active = empl.get("active");
-        this.inactive = empl.get("inactive");
+    public Employee(HashMap <String, String> Results){
+        this.id = Integer.parseInt(Results.get("id"));
+        this.badgeid = Results.get("badgeid");
+        this.firstname = Results.get("firstname");
+        this.middlename = Results.get("middlename");
+        this.lastname = Results.get("lastname");
+        this.employeetypeid = Integer.parseInt(Results.get("employeetypeid"));
+        this.deptid = Integer.parseInt(Results.get("departmentid"));
+        this.shiftid = Integer.parseInt(Results.get("shiftid"));
+        this.active = LocalDateTime.parse(Results.get("active"));
+        this.inactive = Results.get("inactive");
         
-        this.empl_copy = empl;
+        this.empl_copy = Results;
         
-        active = active.substring(0, 10);
+        //active = active.substring(0, 10);
         
         if (inactive == "null") {
             inactive = "none";
         }
         
     }
-    
+
+  
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("#").append(badgeid).append(" (").append(lname).append(", ");
-        s.append(fname).append(" ").append(mname).append("): ").append("employeetypeid: ");
-        s.append(empltype).append(", departmentid: ").append(deptid).append(", shiftid: ");
+        s.append("#").append(badgeid).append(" (").append(lastname).append(", ");
+        s.append(firstname).append(" ").append(middlename).append("): ").append("employeetypeid: ");
+        s.append(employeetypeid).append(", departmentid: ").append(deptid).append(", shiftid: ");
         s.append(shiftid).append(", active: ").append(active).append(", inactive: ").append(inactive);
         return s.toString();
     }

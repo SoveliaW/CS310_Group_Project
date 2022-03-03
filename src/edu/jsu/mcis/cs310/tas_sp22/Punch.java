@@ -3,53 +3,35 @@ import java.util.Date.*;
 import java.sql.Timestamp.*;
 import java.time.LocalDateTime;
 import java.sql.*;
-import java.sql.Connection;
 import java.util.HashMap;
 
 public class Punch { 
-   private String TerminalId;
-   private String PunchTypeId;
-   private String eventtypeid;
-   private String timestamp;
-   private String badgeid;
+   private int terminalid,id;
+   private PunchType PunchTypeid;
+   private String badgeid,adjustmenttype;
+   private LocalDateTime timestamp;
+   private Badge badge;
    HashMap <String, String> Pun_copy;
    
-   public Punch(HashMap <String, String> Pun){
-        this.TerminalId = Pun.get("TerminalId");
-        this.PunchTypeId = Pun.get("PunchTypeId;");
-        this.eventtypeid = Pun.get("eventtypeid");
-        this.timestamp = Pun.get("timestamp");
-        this.badgeid = Pun.get("badgeid");
-         
-        this.Pun_copy = Pun;
-    }
+   public Punch(HashMap <String, String> Results,Badge emptybadge){
+        this.terminalid = Integer.parseInt(Results.get("terminalid"));
+        this.PunchTypeid = PunchType.values()[Integer.parseInt(Results.get("eventtypeid"))];
+        this.id=0;
+        this.badgeid = null;
+        this.adjustmenttype=null;
+        this.badge=emptybadge;
+        if (Results.get("timestamp")!=null){ // if no timestamp it is a new punch
+            //so collect current date&time and use for punch
+         this.timestamp=LocalDateTime.now();
+        }
    
    
-   Timestamp timestamp2 = new Timestamp(new java.util.Date().getTime());
-   
-   
-    public String getEventtypeid() {
-        return eventtypeid;
+      //Timestamp timestamp2 = new Timestamp(new java.util.Date().getTime());
     }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public String getBadgeid() {
-        return badgeid;
-    }
-
-    
-
-    public String getTerminalId() {
-        return TerminalId;
-    }
-
-    public String printOriginal() {
+public String printOriginal() {
          StringBuilder s = new StringBuilder();
         
-        return PunchTypeId;
+        return s.toString();
     }
   
 }

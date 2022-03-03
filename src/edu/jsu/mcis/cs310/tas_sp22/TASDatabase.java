@@ -45,8 +45,7 @@ public class TASDatabase {
         /*Employee*/       
     
     public Employee getEmployee(int id) {       
-        ArrayList<String> keys = new ArrayList<String>();
-        HashMap <String, String> empl = new HashMap <>() ;
+        HashMap<String, String> params = new HashMap<>();
 
         try{
          String query= "SELECT * FROM employee WHERE id = ?;";
@@ -55,21 +54,22 @@ public class TASDatabase {
          
          boolean pstmtExe = pstmt.execute();
          
-         if(pstmtExe){
-            ResultSet resultset = pstmt.getResultSet(); 
-              
-            while(resultset.next()){
-                ResultSetMetaData metadata = resultset.getMetaData();
-                int columnCount = metadata.getColumnCount();
-            
-                    for (int i = 1; i <= columnCount; ++i) {
-                        keys.add(metadata.getColumnLabel(i));
-                    }
-                    
-                    for (int i = 1; i <= columnCount; ++i) {
-                        Object value = resultset.getObject(i);
-                        empl.put(keys.get(i - 1), String.valueOf(value));
-                    }  
+
+            if (pstmtExe) {
+                
+                ResultSet resultset = pstmt.getResultSet();
+
+                if(resultset.next()) {
+                 params.put("id", String.valueOf(resultset.getInt("id")));
+                 params.put("badgeid", resultset.getString("badgeid"));
+                 params.put("description", resultset.getString("description"));
+                 params.put("firstname",resultset.getString("firstname"));
+                 params.put("lastname",resultset.getString("lasttname"));
+                 params.put("middlename",resultset.getString("middlename"));
+                 params.put("employeetypeid", String.valueOf(resultset.getInt("employeetypeid")));
+                 params.put("departmentid", String.valueOf(resultset.getInt("departmentid")));
+                 params.put("shiftid", String.valueOf(resultset.getInt("shiftid")));
+                 params.put("active",resultset.getTime("active").toString());
                 }
             }
         }
@@ -77,8 +77,8 @@ public class TASDatabase {
             e.printStackTrace(); 
         }
         
-        Employee hmap = new Employee(empl);
-        return hmap;
+        Employee Results = new Employee(params);
+        return Results;
     }
     
     public Employee getEmployee(Badge id) {       
@@ -111,82 +111,74 @@ public class TASDatabase {
             /*Punch*/       
     
     public Punch  getPunch(int id) {
-        ArrayList<String> keys = new ArrayList<String>();
-        HashMap <String, String> Pun = new HashMap <>() ;
+        HashMap<String, String> params = new HashMap<>();
         
         try{
-         String query= "SELECT * FROM tas_sp22_v1.employee WHERE id =?;";
+         String query= "SELECT * FROM tas_sp22_v1.event WHERE id =?;";
          PreparedStatement pstmt = connection.prepareStatement(query);
          pstmt.setInt(1,id);
          
          boolean pstmtExe = pstmt.execute();
          
-         if(pstmtExe){
-            ResultSet resultset = pstmt.getResultSet(); 
-              
-            while(resultset.next()){
-                ResultSetMetaData metadata = resultset.getMetaData();  
-                int columnCount = metadata.getColumnCount();
-            
-                    for (int i = 1; i <= columnCount; ++i) {
-                        keys.add(metadata.getColumnLabel(i));
-                    }
+         if (pstmtExe) {
+                
+                ResultSet resultset = pstmt.getResultSet();
+
+                if(resultset.next()) {
                     
-                    for (int i = 1; i <= columnCount; ++i) {
-                        Object value = resultset.getObject(i);
-                        Pun.put(keys.get(i - 1), String.valueOf(value));
-                    }  
-                }
+                    params.put("terminalId", resultset.getString("terminalId"));
+                    params.put("eventtypeid",String.valueOf(resultset.getInt("eventtypeid")));
+                    params.put("timestamp",resultset.getTime("timestamp").toString());
+                    params.put("badgeid", resultset.getString("badgeid"));
+                 }
             }
         }
         catch(Exception e) {
          e.printStackTrace(); 
         }
         
-        Punch hmap = new Punch(Pun);
-        return hmap;
+     //Punch Results = new Punch(params,);// Needs another parma for punch constuctor 
+     Punch Results=null;
+     return Results;
     } 
     
             /*Shift*/       
    
     public Shift getShift(int id) {       //getShift that takes an int id as a parameter
-        ArrayList<String> keys = new ArrayList<String>();
-        
+        HashMap<String, String> params = new HashMap<>();
         
         try {
             
             String query= "Select * FROM shift WHERE id = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, id);
-            
+           
             boolean pstmtExe = pstmt.execute();
 
             if (pstmtExe) {
-
-                ResultSet resultset = pstmt.getResultSet();
+               ResultSet resultset = pstmt.getResultSet();
 
                 if(resultset.next()) {
 
-                    HashMap<String, String> params = new HashMap<>();
-                    
                     params.put("description", resultset.getString("description"));
-                    
                     params.put("id", String.valueOf(resultset.getInt("id")));
-                    
-                    resultset.getTime("shiftstart");
-
-                    Shift hmap = new Shift(params); 
-                    
+                    params.put("shiftstart",resultset.getTime("shiftstart").toLocalTime().toString());
+                    params.put("shiftstop",resultset.getTime("shiftstop").toLocalTime().toString());
+                    params.put("roundinterval", String.valueOf(resultset.getInt("roundinterval")));
+                    params.put("graceperiod", String.valueOf(resultset.getInt("graceperiod")));
+                    params.put("dockpenalty", String.valueOf(resultset.getInt("dockpenalty")));
+                    params.put("lunchstart",resultset.getTime("lunchstart").toLocalTime().toString());
+                    params.put("lunchstop",resultset.getTime("lunchstop").toLocalTime().toString());
+                    params.put("lunchthreshold", String.valueOf(resultset.getInt("lunchthreshold")));
                 }
-                
             }
-            
         }
+       
         catch(Exception e) {
             e.printStackTrace(); 
         }
-        
-        return hmap;
+       Shift Results = new Shift(params);
+        return Results;
         }
     
     public Shift getShift(Badge id) {       //getShift that takes a Badge id as a parameter
