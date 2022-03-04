@@ -11,9 +11,7 @@ public class TAS {
         
         if (db.isConnected()){
             System.err.println("Connected Successfully!");
-             Badge b1 = db.getBadge("B6902696");
-             Shift s1 = db.getShift(b1);
-            System.out.println(s1);
+            
         }
     }
 }

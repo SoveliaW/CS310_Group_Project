@@ -3,34 +3,40 @@ import java.util.Date.*;
 import java.sql.Timestamp.*;
 import java.time.LocalDateTime;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
-public class Punch { 
-   private int terminalid,id;
-   private PunchType PunchTypeid;
-   private String badgeid,adjustmenttype;
+public class Punch {
+    
+   private int terminalid, id;
+   private PunchType punchtypeid;
+   private String badgeid, adjustmenttype;
    private LocalDateTime timestamp;
-   private Badge badge, emptybadge;
-   HashMap <String, String> Pun_copy;
    
-   public Punch(HashMap <String, String> Results){
-        this.terminalid = Integer.parseInt(Results.get("terminalid"));
-        this.PunchTypeid = PunchType.values()[Integer.parseInt(Results.get("eventtypeid"))];
-        this.id=0;
-        this.badgeid = null;
-        this.adjustmenttype=null;
-        //this.badge=emptybadge;
-        if (Results.get("timestamp")!=null){ // if no timestamp it is a new punch
-            //so collect current date&time and use for punch
-         this.timestamp=LocalDateTime.now();
-        }
-   
+   public Punch(HashMap <String, String> params){
+        //System.err.println("Punch: " + params.get("terminalid"));
+        this.terminalid = Integer.parseInt(params.get("terminalid"));
+        this.id = Integer.parseInt(params.get("id"));
+        this.punchtypeid = PunchType.values()[Integer.parseInt(params.get("eventtypeid"))];
+        this.badgeid = params.get("badgeid");
+        this.adjustmenttype = null;
+        this.timestamp = LocalDateTime.parse(params.get("timestamp"));
+        String dayofweek=timestamp.getDayOfWeek().toString();
       //Timestamp timestamp2 = new Timestamp(new java.util.Date().getTime());
     }
-public String printOriginal() {
-         StringBuilder s = new StringBuilder();
+    public String printOriginal() {
         
-        return s.toString();
+        // "#D2C39273 CLOCK IN: WED 09/05/2018 07:00:07"
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
+        
+        StringBuilder s = new StringBuilder();
+        //?????? missing how to get the clock in or out variable
+        s.append("#").append(badgeid).append(' ').append(punchtypeid);
+        s.append(": ").append(timestamp.format(dtf));
+
+        return s.toString().toUpperCase();
     }
   
 }

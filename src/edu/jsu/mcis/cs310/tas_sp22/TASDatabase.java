@@ -125,10 +125,10 @@ public class TASDatabase {
                 ResultSet resultset = pstmt.getResultSet();
 
                 while(resultset.next()) {
-                    
-                    params.put("terminalId", resultset.getString("terminalId"));
+                    params.put("id", String.valueOf(id));
+                    params.put("terminalid", String.valueOf(resultset.getInt("terminalid")));
                     params.put("eventtypeid",String.valueOf(resultset.getInt("eventtypeid")));
-                    params.put("timestamp",resultset.getTime("timestamp").toString());
+                    params.put("timestamp", resultset.getTimestamp("timestamp").toLocalDateTime().toString());
                     params.put("badgeid", resultset.getString("badgeid"));
                  }
             }
@@ -209,7 +209,6 @@ public class TASDatabase {
         }
     
         /*Connection*/
-    
     
     public boolean isConnected() {
         boolean result = false;
