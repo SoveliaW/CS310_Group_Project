@@ -13,8 +13,7 @@ public class Shift {
     private int roundinterval, graceperiod, dockpenalty, lunchthreshold, id;
     private LocalTime shiftstart, shiftstop,lunchstart, lunchstop;
     private long shiftmin,lunchmin;
-    
-        
+       
    public Shift(HashMap <String, String> params){
       
         this.id = Integer.parseInt(params.get("id"));

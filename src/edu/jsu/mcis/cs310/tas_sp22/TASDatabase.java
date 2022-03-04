@@ -143,8 +143,7 @@ public class TASDatabase {
     } 
     
             /*Shift*/       
-   
-    public Shift getShift(int id) {       //getShift that takes an int id as a parameter
+   public Shift getShift(int id) {       //getShift that takes an int id as a parameter
         HashMap<String, String> params = new HashMap<>();
         try {
             

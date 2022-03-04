@@ -9,7 +9,6 @@ public class Employee {
     private int employeetypeid,deptid,shiftid,id;
     private LocalDate active;
     
-    
     public Employee(HashMap <String, String> params){
        
         this.id = Integer.parseInt(params.get("id"));

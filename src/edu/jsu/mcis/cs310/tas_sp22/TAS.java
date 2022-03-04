@@ -11,7 +11,6 @@ public class TAS {
         
         if (db.isConnected()){
             System.err.println("Connected Successfully!");
-            
-        }
+         }
     }
 }

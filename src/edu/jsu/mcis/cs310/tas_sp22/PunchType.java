@@ -9,6 +9,5 @@ public enum PunchType {
     @Override
     public String toString() { return description; }
     
-    
     }
 
