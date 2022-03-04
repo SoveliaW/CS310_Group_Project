@@ -1,7 +1,6 @@
 package edu.jsu.mcis.cs310.tas_sp22;
-
+import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Employee {
@@ -11,28 +10,27 @@ public class Employee {
     HashMap <String, String> empl_copy;
     
     public Employee(HashMap <String, String> Results){
-        this.id = Integer.parseInt(Results.get("id"));
-        this.badgeid = Results.get("badgeid");
-        this.firstname = Results.get("firstname");
-        this.middlename = Results.get("middlename");
-        this.lastname = Results.get("lastname");
-        this.employeetypeid = Integer.parseInt(Results.get("employeetypeid"));
-        this.deptid = Integer.parseInt(Results.get("departmentid"));
-        this.shiftid = Integer.parseInt(Results.get("shiftid"));
-        this.active = LocalDate.parse(Results.get("active"));
-        this.inactive = "none";
+     this.id = Integer.parseInt(Results.get("id"));
+     this.badgeid = Results.get("badgeid");
+     this.firstname = Results.get("firstname");
+     this.middlename = Results.get("middlename");
+     this.lastname = Results.get("lastname");
+     this.employeetypeid = Integer.parseInt(Results.get("employeetypeid"));
+     this.deptid = Integer.parseInt(Results.get("departmentid"));
+     this.shiftid = Integer.parseInt(Results.get("shiftid"));
+     this.active = LocalDate.parse(Results.get("active"));
+     this.inactive = "none";
         
-        this.empl_copy = Results;
+     this.empl_copy = Results;
         
         //active = active.substring(0, 10);
         
-        if (inactive == "null") {
-            inactive = "none";
-        }
-        
+     if (inactive == "null") {
+         inactive = "none";
+         }
+     this.active=active.toLocalDateTime();
     }
 
-  
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
