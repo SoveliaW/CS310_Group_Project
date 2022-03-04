@@ -184,7 +184,7 @@ public class TASDatabase {
     public Shift getShift(Badge badge) {       //getShift that takes a Badge id as a parameter
         String badgeid = badge.getId();
         int id_int = 0;
-
+        HashMap<String, String> params = new HashMap<>();
         try {
             String query = "SELECT * FROM employee WHERE badgeid = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -196,16 +196,16 @@ public class TASDatabase {
                 ResultSet resultset = pstmt.executeQuery();
                 
                 while(resultset.next()){
-                    badgeid = resultset.getString(2);
-                    id_int = resultset.getInt(1);
+                    params.put("shiftid", String.valueOf(resultset.getInt("shiftid")));
                 }
             }
         }
+        
         catch (Exception e) { 
             e.printStackTrace();
         }
-        
-        return getShift(id_int);
+        int shiftid = Integer.parseInt(params.get("shiftid"));
+        return getShift(shiftid);
         }
     
         /*Connection*/
