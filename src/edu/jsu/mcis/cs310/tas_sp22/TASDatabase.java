@@ -208,6 +208,7 @@ public class TASDatabase {
     
         /*Connection*/
     
+    
     public boolean isConnected() {
         boolean result = false;
         

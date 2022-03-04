@@ -17,7 +17,6 @@ public class Shift {
         
    public Shift(HashMap <String, String> Results){
        
-       
         this.id = Integer.parseInt(Results.get("id"));
         this.description = Results.get("description");
         this.shiftstart = LocalTime.parse(Results.get("shiftstart"));

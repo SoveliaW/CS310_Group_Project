@@ -10,7 +10,6 @@ public class TAS {
         TASDatabase db = new TASDatabase("tasuser", "PASSWORD", "localhost");
         
         if (db.isConnected()){
-            
             System.err.println("Connected Successfully!");
             Employee e1 = db.getEmployee(10);
             System.out.println(e1);

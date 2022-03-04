@@ -25,7 +25,6 @@ public class Punch {
          this.timestamp=LocalDateTime.now();
         }
    
-   
       //Timestamp timestamp2 = new Timestamp(new java.util.Date().getTime());
     }
 public String printOriginal() {
