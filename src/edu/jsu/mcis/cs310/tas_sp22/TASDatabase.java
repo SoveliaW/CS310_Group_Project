@@ -26,7 +26,7 @@ public class TASDatabase {
             boolean ptExe = pstmt.execute();
             
             if (ptExe) {
-                ResultSet resultset = pstmt.executeQuery();
+                ResultSet resultset = pstmt.getResultSet();
                 
                 while(resultset.next()){
                     id = resultset.getString(1);
@@ -50,7 +50,7 @@ public class TASDatabase {
         try{
          String query= "SELECT * FROM employee WHERE id = ?";
          PreparedStatement pstmt = connection.prepareStatement(query);
-         pstmt.setInt(1,id);
+         pstmt.setInt(1, id);
          
          boolean pstmtExe = pstmt.execute();
          
@@ -60,7 +60,7 @@ public class TASDatabase {
                 ResultSet resultset = pstmt.getResultSet();
 
                 if(resultset.next()) {
-                 params.put("id", String.valueOf(resultset.getInt("id")));
+                 params.put("id", String.valueOf(id));
                  params.put("badgeid", resultset.getString("badgeid"));
                  params.put("firstname",resultset.getString("firstname"));
                  params.put("lastname",resultset.getString("lastname"));
@@ -69,6 +69,7 @@ public class TASDatabase {
                  params.put("departmentid", String.valueOf(resultset.getInt("departmentid")));
                  params.put("shiftid", String.valueOf(resultset.getInt("shiftid")));
                  params.put("active",resultset.getDate("active").toString());
+                 params.put("inactive", resultset.getString("inactive"));
                 }
             }
         }
@@ -76,12 +77,12 @@ public class TASDatabase {
             e.printStackTrace(); 
         }
         
-        Employee Results = new Employee(params);
-        return Results;
+        Employee employee = new Employee(params);
+        return employee;
     }
     
-    public Employee getEmployee(Badge id) {       
-        String badgeid = id.getId();
+    public Employee getEmployee(Badge badge) {       
+        String badgeid = badge.getId();
         int id_int = 0;
 
         try {
@@ -145,7 +146,6 @@ public class TASDatabase {
    
     public Shift getShift(int id) {       //getShift that takes an int id as a parameter
         HashMap<String, String> params = new HashMap<>();
-        
         try {
             
             String query= "Select * FROM shift WHERE id = ?";
@@ -155,8 +155,8 @@ public class TASDatabase {
             boolean pstmtExe = pstmt.execute();
 
             if (pstmtExe) {
-               ResultSet resultset = pstmt.getResultSet();
-
+                ResultSet resultset = pstmt.getResultSet();
+                
                 if(resultset.next()) {
 
                     params.put("description", resultset.getString("description"));
@@ -171,17 +171,18 @@ public class TASDatabase {
                     params.put("lunchthreshold", String.valueOf(resultset.getInt("lunchthreshold")));
                 }
             }
+           
         }
        
         catch(Exception e) {
             e.printStackTrace(); 
         }
-       Shift Results = new Shift(params);
+        Shift Results = new Shift(params);
         return Results;
         }
     
-    public Shift getShift(Badge id) {       //getShift that takes a Badge id as a parameter
-        String badgeid = id.getId();
+    public Shift getShift(Badge badge) {       //getShift that takes a Badge id as a parameter
+        String badgeid = badge.getId();
         int id_int = 0;
 
         try {
@@ -192,10 +193,11 @@ public class TASDatabase {
             boolean ptExe = pstmt.execute();
             
             if (ptExe) {
-                ResultSet resultset = pstmt.getResultSet();
+                ResultSet resultset = pstmt.executeQuery();
                 
-                if (resultset.next()){
-                    id_int = resultset.getInt("id");
+                while(resultset.next()){
+                    badgeid = resultset.getString(2);
+                    id_int = resultset.getInt(1);
                 }
             }
         }

@@ -11,11 +11,9 @@ public class TAS {
         
         if (db.isConnected()){
             System.err.println("Connected Successfully!");
-            Employee e1 = db.getEmployee(10);
-            System.out.println(e1);
-            Badge b1 = db.getBadge("1B2052DE");
-            Employee q1 = db.getEmployee(b1);
-            System.out.println(q1);
+             Badge b1 = db.getBadge("B6902696");
+             Shift s1 = db.getShift(b1);
+            System.out.println(s1);
         }
     }
 }
