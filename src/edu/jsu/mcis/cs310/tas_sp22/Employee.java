@@ -27,8 +27,7 @@ public class Employee {
         
      if (inactive == "null") {
          inactive = "none";
-         }
-     this.active=active.toLocalDateTime();
+        }
     }
 
     @Override
