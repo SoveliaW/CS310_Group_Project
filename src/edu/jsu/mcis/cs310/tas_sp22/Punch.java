@@ -9,22 +9,46 @@ import java.util.HashMap;
 
 public class Punch {
     
-   private int terminalid, id;
+   private int terminalid, id, eventtypeid;
    private PunchType punchtypeid;
    private String badgeid, adjustmenttype;
    private LocalDateTime timestamp;
-   
+   private Badge badge;
    public Punch(HashMap <String, String> params){
-        //System.err.println("Punch: " + params.get("terminalid"));
+
         this.terminalid = Integer.parseInt(params.get("terminalid"));
         this.id = Integer.parseInt(params.get("id"));
         this.punchtypeid = PunchType.values()[Integer.parseInt(params.get("eventtypeid"))];
         this.badgeid = params.get("badgeid");
         this.adjustmenttype = null;
         this.timestamp = LocalDateTime.parse(params.get("timestamp"));
-        String dayofweek=timestamp.getDayOfWeek().toString();
-      //Timestamp timestamp2 = new Timestamp(new java.util.Date().getTime());
+        
+        String dayofweek = timestamp.getDayOfWeek().toString();
+        
     }
+
+    public Punch(int terminalid, Badge badge, int eventtypeid) {
+        this.terminalid = terminalid;
+        this.eventtypeid = eventtypeid;
+        this.badge = badge;
+    }
+    
+    public Badge getBadge(){
+        return badge;
+    }
+    
+    public LocalDateTime getOriginalTimestamp(){
+        
+    }
+            
+    public int getTerminalid(){
+        
+    }
+    
+    public PunchType getPunchtype(){
+        
+    }
+    
     public String printOriginal() {
         
         // "#D2C39273 CLOCK IN: WED 09/05/2018 07:00:07"

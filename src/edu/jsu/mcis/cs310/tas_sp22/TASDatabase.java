@@ -110,7 +110,7 @@ public class TASDatabase {
     
             /*Punch*/       
     
-    public Punch  getPunch(int id) {
+    public Punch getPunch(int id) {
         HashMap<String, String> params = new HashMap<>();
         
         try{
@@ -142,7 +142,12 @@ public class TASDatabase {
      return Results;
     } 
     
-            /*Shift*/       
+    public int insertPunch(Punch p){
+        
+    }
+    
+            /*Shift*/  
+            
    public Shift getShift(int id) {       //getShift that takes an int id as a parameter
         HashMap<String, String> params = new HashMap<>();
         try {
@@ -206,6 +211,39 @@ public class TASDatabase {
         int shiftid = Integer.parseInt(params.get("shiftid"));
         return getShift(shiftid);
         }
+    
+        /*Department*/
+    
+    public Department getDepartment(int id) {
+        HashMap<String, String> params = new HashMap<>();
+        
+        try{
+         String query= "SELECT * FROM tas_sp22_v1.department WHERE id =?";
+         PreparedStatement pstmt = connection.prepareStatement(query);
+         pstmt.setInt(1,id);
+         
+         boolean pstmtExe = pstmt.execute();
+         
+         if (pstmtExe) {
+                
+                ResultSet resultset = pstmt.getResultSet();
+
+                while(resultset.next()) {
+                    params.put("id", String.valueOf(id));
+                    params.put("description", resultset.getString("description"));
+                    params.put("terminalid", String.valueOf(resultset.getInt("terminalid")));
+                    
+                 }
+            }
+        }
+        catch(Exception e) {
+         e.printStackTrace(); 
+        }
+        
+    Department Results = new Department(params);
+     
+     return Results;
+    } 
     
         /*Connection*/
     
