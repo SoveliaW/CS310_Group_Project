@@ -32,7 +32,7 @@ public class Punch {
         this.eventtypeid = eventtypeid;
         this.badge = badge;
     }
-    
+    /*
     public Badge getBadge(){
         return badge;
     }
@@ -48,7 +48,7 @@ public class Punch {
     public PunchType getPunchtype(){
         
     }
-    
+    */
     public String printOriginal() {
         
         // "#D2C39273 CLOCK IN: WED 09/05/2018 07:00:07"

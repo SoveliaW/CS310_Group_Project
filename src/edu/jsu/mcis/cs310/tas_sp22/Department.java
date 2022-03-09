@@ -8,13 +8,9 @@ public class Department {
     private int id, terminalid;
     
     public Department(HashMap <String, String> params) {
-        
         this.description = params.get("description");
         this.id = Integer.parseInt(params.get("id"));
         this.terminalid = Integer.parseInt(params.get("terminalid"));
-        
-        
-        
     }
 
     public String getDescription() {

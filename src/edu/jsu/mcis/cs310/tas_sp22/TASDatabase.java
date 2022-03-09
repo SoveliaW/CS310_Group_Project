@@ -48,28 +48,27 @@ public class TASDatabase {
         HashMap<String, String> params = new HashMap<>();
 
         try{
-         String query= "SELECT * FROM employee WHERE id = ?";
-         PreparedStatement pstmt = connection.prepareStatement(query);
-         pstmt.setInt(1, id);
-         
-         boolean pstmtExe = pstmt.execute();
-         
+            String query= "SELECT * FROM employee WHERE id = ?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, id);
+
+            boolean pstmtExe = pstmt.execute();
 
             if (pstmtExe) {
                 
                 ResultSet resultset = pstmt.getResultSet();
 
                 if(resultset.next()) {
-                 params.put("id", String.valueOf(id));
-                 params.put("badgeid", resultset.getString("badgeid"));
-                 params.put("firstname",resultset.getString("firstname"));
-                 params.put("lastname",resultset.getString("lastname"));
-                 params.put("middlename",resultset.getString("middlename"));
-                 params.put("employeetypeid", String.valueOf(resultset.getInt("employeetypeid")));
-                 params.put("departmentid", String.valueOf(resultset.getInt("departmentid")));
-                 params.put("shiftid", String.valueOf(resultset.getInt("shiftid")));
-                 params.put("active",resultset.getDate("active").toString());
-                 params.put("inactive", resultset.getString("inactive"));
+                    params.put("id", String.valueOf(id));
+                    params.put("badgeid", resultset.getString("badgeid"));
+                    params.put("firstname",resultset.getString("firstname"));
+                    params.put("lastname",resultset.getString("lastname"));
+                    params.put("middlename",resultset.getString("middlename"));
+                    params.put("employeetypeid", String.valueOf(resultset.getInt("employeetypeid")));
+                    params.put("departmentid", String.valueOf(resultset.getInt("departmentid")));
+                    params.put("shiftid", String.valueOf(resultset.getInt("shiftid")));
+                    params.put("active",resultset.getDate("active").toString());
+                    params.put("inactive", resultset.getString("inactive"));
                 }
             }
         }
@@ -108,20 +107,20 @@ public class TASDatabase {
         return getEmployee(id_int);
     } 
     
-            /*Punch*/       
+        /*Punch*/       
     
     public Punch getPunch(int id) {
         HashMap<String, String> params = new HashMap<>();
         
         try{
-         String query= "SELECT * FROM tas_sp22_v1.event WHERE id =?";
-         PreparedStatement pstmt = connection.prepareStatement(query);
-         pstmt.setInt(1,id);
+            String query= "SELECT * FROM tas_sp22_v1.event WHERE id =?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1,id);
          
-         boolean pstmtExe = pstmt.execute();
-         
-         if (pstmtExe) {
-                
+            boolean pstmtExe = pstmt.execute();
+
+            if (pstmtExe) {
+
                 ResultSet resultset = pstmt.getResultSet();
 
                 while(resultset.next()) {
@@ -130,50 +129,22 @@ public class TASDatabase {
                     params.put("eventtypeid",String.valueOf(resultset.getInt("eventtypeid")));
                     params.put("timestamp", resultset.getTimestamp("timestamp").toLocalDateTime().toString());
                     params.put("badgeid", resultset.getString("badgeid"));
-                 }
+                }
             }
         }
         catch(Exception e) {
-         e.printStackTrace(); 
+            e.printStackTrace(); 
         }
         
-     Punch Results = new Punch(params);
-     
-     return Results;
+        Punch Results = new Punch(params);
+        return Results;
     } 
     
     public int insertPunch(Punch p){
-        try{
-         String query= "INSERT INTO tas_sp22_v1.event (id, terminalid, badgeid, timestamp, eventtypeid) VALUES (?,?,?,?,?)";
-         PreparedStatement pstmt = connection.prepareStatement(query);
-        
-         pstmt.setInt(1,id);
-         
-         boolean pstmtExe = pstmt.execute();
-         
-         if (pstmtExe) {
-                
-                ResultSet resultset = pstmt.getResultSet();
-
-                while(resultset.next()) {
-                    params.put("id", String.valueOf(id));
-                    params.put("terminalid", String.valueOf(resultset.getInt("terminalid")));
-                    params.put("eventtypeid",String.valueOf(resultset.getInt("eventtypeid")));
-                    params.put("timestamp", resultset.getTimestamp("timestamp").toLocalDateTime().toString());
-                    params.put("badgeid", resultset.getString("badgeid"));
-                 }
-            }
-        }
-        catch(Exception e) {
-         e.printStackTrace(); 
-        }
-        
-     Punch Results = new Punch(params);
-     
-     return Results;
+       
     }
     
-            /*Shift*/  
+        /*Shift*/  
             
    public Shift getShift(int id) {       //getShift that takes an int id as a parameter
         HashMap<String, String> params = new HashMap<>();
@@ -210,7 +181,7 @@ public class TASDatabase {
         }
         Shift Results = new Shift(params);
         return Results;
-        }
+    }
     
     public Shift getShift(Badge badge) {       //getShift that takes a Badge id as a parameter
         String badgeid = badge.getId();
@@ -237,7 +208,7 @@ public class TASDatabase {
         }
         int shiftid = Integer.parseInt(params.get("shiftid"));
         return getShift(shiftid);
-        }
+    }
     
         /*Department*/
     
@@ -245,31 +216,30 @@ public class TASDatabase {
         HashMap<String, String> params = new HashMap<>();
         
         try{
-         String query= "SELECT * FROM tas_sp22_v1.department WHERE id =?";
-         PreparedStatement pstmt = connection.prepareStatement(query);
-         pstmt.setInt(1,id);
-         
-         boolean pstmtExe = pstmt.execute();
-         
-         if (pstmtExe) {
-                
+            String query= "SELECT * FROM department WHERE id =?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1,id);
+
+            boolean pstmtExe = pstmt.execute();
+
+            if (pstmtExe) {
+
                 ResultSet resultset = pstmt.getResultSet();
 
                 while(resultset.next()) {
                     params.put("id", String.valueOf(id));
                     params.put("description", resultset.getString("description"));
                     params.put("terminalid", String.valueOf(resultset.getInt("terminalid")));
-                    
-                 }
+
+                }
             }
         }
         catch(Exception e) {
-         e.printStackTrace(); 
+            e.printStackTrace(); 
         }
         
-    Department Results = new Department(params);
-     
-     return Results;
+        Department Results = new Department(params);
+        return Results;
     } 
     
         /*Connection*/
