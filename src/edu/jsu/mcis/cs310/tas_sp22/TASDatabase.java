@@ -151,10 +151,12 @@ public class TASDatabase {
         */
         //This is what our method is taking 
         //Punch p1 = new Punch(103, db.getBadge("021890C0"), 1);
+        int terminalid = p.getTerminalid();
+        Badge badge = p.getBadge();
         
+        Employee employee = getEmployee(badge);
         
-        
-       if(getDepartment(id)==getEmployee(id)){
+        if(getDepartment(id)==getEmployee(id)){
             
             // need to bring in hash map and retrive data ?So we can place inside the query
             try{
