@@ -141,7 +141,43 @@ public class TASDatabase {
     } 
     
     public int insertPunch(Punch p){
-       
+        int result = 0;
+        /* It should first attempt to authorize the new punch, checking to make 
+        sure that the terminal ID that the punch originated from matches the ID
+        of the designated clock terminal of the employee's department. 
+        (You will find the newly-added "getDepartment()" method
+        described above, and the "getEmployee()" method 
+        added in Feature 1, to be helpful for this.) 
+        */
+        //This is what our method is taking 
+        //Punch p1 = new Punch(103, db.getBadge("021890C0"), 1);
+        
+       if(getDepartment(id)==getEmployee(id)){
+            
+            // need to bring in hash map and retrive data ?So we can place inside the query
+            try{
+            String query = "INSERT INTO registration (studentid, termid, crn) VALUES (?,?,?,?);";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1,terminalid);
+            pstmt.setInt(2,eventtypeid);
+            pstmt.setInt(3,badge);
+            pstmt.setInt(3,timestamp);
+            result = pstmt.executeUpdate();
+            }  
+            catch (Exception e){
+            e.printStackTrace(); 
+            }
+       }
+       /*
+       After the punch has been authorized and inserted into the database 
+       successfully, the method should retrieve the numeric ID of the newly-inserted
+       punch—which will be automatically assigned by the database—and return 
+       this ID as an integer.  (See the "Java Database Programming" lecture notes 
+       for an example of how to retrieve auto-generated keys.)  If the punch failed
+       the authorization check, or if an error occurred during the insertion 
+       process, a default ID of zero should be returned.
+       */
+     return result;
     }
     
         /*Shift*/  

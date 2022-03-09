@@ -32,23 +32,23 @@ public class Punch {
         this.eventtypeid = eventtypeid;
         this.badge = badge;
     }
-    /*
+    
     public Badge getBadge(){
         return badge;
     }
     
     public LocalDateTime getOriginalTimestamp(){
-        
+        return badge;
     }
             
     public int getTerminalid(){
-        
+        return terminalid;
     }
     
     public PunchType getPunchtype(){
-        
+        return badge;
     }
-    */
+    
     public String printOriginal() {
         
         // "#D2C39273 CLOCK IN: WED 09/05/2018 07:00:07"
