@@ -31,6 +31,7 @@ public class Punch {
         this.terminalid = terminalid;
         this.eventtypeid = eventtypeid;
         this.badge = badge;
+        this.timestamp = LocalDateTime.now();
     }
     
     public Badge getBadge(){
@@ -38,7 +39,7 @@ public class Punch {
     }
     
     public LocalDateTime getOriginalTimestamp(){
-        return badge;
+        return timestamp;
     }
             
     public int getTerminalid(){
@@ -46,7 +47,7 @@ public class Punch {
     }
     
     public PunchType getPunchtype(){
-        return badge;
+        return punchtypeid;
     }
     
     public String printOriginal() {
