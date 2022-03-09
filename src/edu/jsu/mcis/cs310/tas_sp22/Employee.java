@@ -22,6 +22,28 @@ public class Employee {
         this.active = LocalDate.parse(params.get("active"));
         this.inactive ="none";
     }
+
+    public String getBadgeid() {
+        return badgeid;
+    }
+
+    public int getEmployeetypeid() {
+        return employeetypeid;
+    }
+
+    public int getDeptid() {
+        return deptid;
+    }
+
+    public int getShiftid() {
+        return shiftid;
+    }
+
+    public int getId() {
+        return id;
+    }
+    
+    
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
