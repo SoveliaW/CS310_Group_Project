@@ -34,6 +34,10 @@ public class Punch {
         this.timestamp = LocalDateTime.now();
     }
     
+    public int getEventtypeid(){
+        return eventtypeid;
+    }
+    
     public Badge getBadge(){
         return badge;
     }

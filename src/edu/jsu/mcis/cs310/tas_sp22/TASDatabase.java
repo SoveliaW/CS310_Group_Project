@@ -142,30 +142,29 @@ public class TASDatabase {
     
     public int insertPunch(Punch p){
         int result = 0;
-        /* It should first attempt to authorize the new punch, checking to make 
-        sure that the terminal ID that the punch originated from matches the ID
-        of the designated clock terminal of the employee's department. 
-        (You will find the newly-added "getDepartment()" method
-        described above, and the "getEmployee()" method 
-        added in Feature 1, to be helpful for this.) 
-        */
-        //This is what our method is taking 
+         
         //Punch p1 = new Punch(103, db.getBadge("021890C0"), 1);
         int terminalid = p.getTerminalid();
-        Badge badge = p.getBadge();
+        Badge badgeid = p.getBadge();
+        int eventtypeid = p.getEventtypeid();
         
-        Employee employee = getEmployee(badge);
         
-        if(getDepartment(id)==getEmployee(id)){
+        
+        Employee employee = getEmployee(badgeid);
+        int departmentid = employee.getDeptid();
+        int terminalid_employee = (getDepartment(departmentid)).getTerminalid();
+        
+        if(terminalid ==terminalid_employee || terminalid ==0){
             
-            // need to bring in hash map and retrive data ?So we can place inside the query
             try{
-            String query = "INSERT INTO registration (studentid, termid, crn) VALUES (?,?,?,?);";
+            String query = "INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (?,?,?,?,?);";
             PreparedStatement pstmt = connection.prepareStatement(query);
+            
             pstmt.setInt(1,terminalid);
-            pstmt.setInt(2,eventtypeid);
-            pstmt.setInt(3,badge);
-            pstmt.setInt(3,timestamp);
+            pstmt.setString(2,badgeid.toString());
+            pstmt.setTimestamp(3, java.sql.Timestamp.valueOf(p.getOriginalTimestamp()));
+            pstmt.setInt(4,eventtypeid);
+            
             result = pstmt.executeUpdate();
             }  
             catch (Exception e){
