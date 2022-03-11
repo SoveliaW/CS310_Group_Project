@@ -1,6 +1,8 @@
 package edu.jsu.mcis.cs310.tas_sp22;
 import java.sql.*;
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.*;
 
@@ -142,13 +144,13 @@ public class TASDatabase {
     
     public int insertPunch(Punch p){
         int result = 0;
+        int key = 0;
+        ResultSet keys;
          
         //Punch p1 = new Punch(103, db.getBadge("021890C0"), 1);
         int terminalid = p.getTerminalid();
         Badge badgeid = p.getBadge();
         int eventtypeid = p.getEventtypeid();
-        
-        
         
         Employee employee = getEmployee(badgeid);
         int departmentid = employee.getDeptid();
@@ -158,7 +160,7 @@ public class TASDatabase {
             
             try{
             String query = "INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (?,?,?,?,?);";
-            PreparedStatement pstmt = connection.prepareStatement(query);
+            PreparedStatement pstmt = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             
             pstmt.setInt(1,terminalid);
             pstmt.setString(2,badgeid.toString());
@@ -166,20 +168,18 @@ public class TASDatabase {
             pstmt.setInt(4,eventtypeid);
             
             result = pstmt.executeUpdate();
+                if (result == 1) {
+                    keys = pstmt.getGeneratedKeys();
+                    if (keys.next()) { 
+                        key = keys.getInt(1); 
+                    }
+                }
             }  
             catch (Exception e){
             e.printStackTrace(); 
             }
        }
-       /*
-       After the punch has been authorized and inserted into the database 
-       successfully, the method should retrieve the numeric ID of the newly-inserted
-       punch—which will be automatically assigned by the database—and return 
-       this ID as an integer.  (See the "Java Database Programming" lecture notes 
-       for an example of how to retrieve auto-generated keys.)  If the punch failed
-       the authorization check, or if an error occurred during the insertion 
-       process, a default ID of zero should be returned.
-       */
+     System.out.println(result);
      return result;
     }
     

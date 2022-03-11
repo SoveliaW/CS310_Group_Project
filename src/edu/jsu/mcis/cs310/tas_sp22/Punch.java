@@ -31,7 +31,11 @@ public class Punch {
         this.terminalid = terminalid;
         this.eventtypeid = eventtypeid;
         this.badge = badge;
-        this.timestamp = LocalDateTime.now();
+        //this.timestamp = LocalDateTime.now();
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
     
     public int getEventtypeid(){

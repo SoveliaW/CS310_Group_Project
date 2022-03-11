@@ -1,6 +1,7 @@
 package edu.jsu.mcis.cs310.tas_sp22;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 
 public class TAS {
@@ -11,6 +12,7 @@ public class TAS {
         
         if (db.isConnected()){
             System.err.println("Connected Successfully!");
-         }
+         
     }
+}
 }
