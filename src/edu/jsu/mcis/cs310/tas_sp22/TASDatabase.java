@@ -3,6 +3,7 @@ import java.sql.*;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.*;
 
@@ -14,8 +15,6 @@ public class TASDatabase {
         this.connection = openConnection(username, password, address);
     }
     String results =null;
-    
-        /*Badge*/
     
     public Badge getBadge(String badgeid) {
         String id = null, des = null;
@@ -43,9 +42,34 @@ public class TASDatabase {
         Badge result = new Badge(id, des);
         return result;
     } 
-    
-        /*Employee*/       
-    
+     
+    public Badge getBadge(int punchid) {
+        String badgeid = null;
+     
+        try {
+            String query = "Select *FROM Event Where id = ?;";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, punchid);
+            
+            boolean ptExe = pstmt.execute();
+            
+            if (ptExe) {
+                ResultSet resultset = pstmt.getResultSet();
+                
+                while(resultset.next()){
+                    badgeid = resultset.getString(1);
+                    
+                }
+            }
+        }
+        catch (Exception e) { 
+            e.printStackTrace();
+        }
+        
+        
+        return getBadge(badgeid);
+    } 
+   
     public Employee getEmployee(int id) {       
         HashMap<String, String> params = new HashMap<>();
 
@@ -108,9 +132,7 @@ public class TASDatabase {
         
         return getEmployee(id_int);
     } 
-    
-        /*Punch*/       
-    
+   
     public Punch getPunch(int id) {
         HashMap<String, String> params = new HashMap<>();
         
@@ -131,14 +153,17 @@ public class TASDatabase {
                     params.put("eventtypeid",String.valueOf(resultset.getInt("eventtypeid")));
                     params.put("timestamp", resultset.getTimestamp("timestamp").toLocalDateTime().toString());
                     params.put("badgeid", resultset.getString("badgeid"));
+                   
                 }
             }
+          
         }
         catch(Exception e) {
             e.printStackTrace(); 
         }
-        
-        Punch Results = new Punch(params);
+        String badgeid =params.get("badgeid");
+                    Badge badge=getBadge(badgeid);
+        Punch Results = new Punch(params,badge);
         return Results;
     } 
     
@@ -149,29 +174,45 @@ public class TASDatabase {
          
         //Punch p1 = new Punch(103, db.getBadge("021890C0"), 1);
         int terminalid = p.getTerminalid();
-        Badge badgeid = p.getBadge();
+        Badge badge = p.getBadge();
+        String badgeid = badge.getId();
         int eventtypeid = p.getEventtypeid();
         
-        Employee employee = getEmployee(badgeid);
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS");
+        LocalDateTime now =p.getTimestamp();
+        String currenttime=now.format(dtf);
+        Timestamp timestamp =Timestamp.valueOf(currenttime);
+        System.err.println(timestamp+" : this is what the time stamp is");
+        Employee employee = getEmployee(badge);
+         
         int departmentid = employee.getDeptid();
         int terminalid_employee = (getDepartment(departmentid)).getTerminalid();
+       
+        boolean test =(terminalid ==terminalid_employee);
         
-        if(terminalid ==terminalid_employee || terminalid ==0){
+        
+        if(test){
             
             try{
-            String query = "INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (?,?,?,?,?);";
+            String query = "INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (?,?,?,?);";
+           
             PreparedStatement pstmt = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             
+           
             pstmt.setInt(1,terminalid);
-            pstmt.setString(2,badgeid.toString());
-            pstmt.setTimestamp(3, java.sql.Timestamp.valueOf(p.getOriginalTimestamp()));
+            pstmt.setString(2,badgeid);
+            pstmt.setTimestamp(3,timestamp);
             pstmt.setInt(4,eventtypeid);
-            
+           
             result = pstmt.executeUpdate();
+            
                 if (result == 1) {
                     keys = pstmt.getGeneratedKeys();
+                    
                     if (keys.next()) { 
                         key = keys.getInt(1); 
+                        
                     }
                 }
             }  
@@ -179,13 +220,14 @@ public class TASDatabase {
             e.printStackTrace(); 
             }
        }
-     System.out.println(result);
-     return result;
+        else{
+        return key;
+      }
+     
+     return key;
     }
-    
-        /*Shift*/  
             
-   public Shift getShift(int id) {       //getShift that takes an int id as a parameter
+    public Shift getShift(int id) {       //getShift that takes an int id as a parameter
         HashMap<String, String> params = new HashMap<>();
         try {
             
@@ -249,8 +291,6 @@ public class TASDatabase {
         return getShift(shiftid);
     }
     
-        /*Department*/
-    
     public Department getDepartment(int id) {
         HashMap<String, String> params = new HashMap<>();
         
@@ -280,8 +320,6 @@ public class TASDatabase {
         Department Results = new Department(params);
         return Results;
     } 
-    
-        /*Connection*/
     
     public boolean isConnected() {
         boolean result = false;
