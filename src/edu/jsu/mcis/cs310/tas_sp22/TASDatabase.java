@@ -2,9 +2,11 @@ package edu.jsu.mcis.cs310.tas_sp22;
 import java.sql.*;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.*;
 
 public class TASDatabase {
@@ -320,6 +322,14 @@ public class TASDatabase {
         Department Results = new Department(params);
         return Results;
     } 
+    
+    public ArrayList<Punch> getDailyPunchList(Badge badge, LocalDate date) {
+       ArrayList DailyPunchList = NULL;
+       Badge name = badge;
+       LocalDate localdate = date;
+       
+        return DailyPunchList;
+    }
     
     public boolean isConnected() {
         boolean result = false;

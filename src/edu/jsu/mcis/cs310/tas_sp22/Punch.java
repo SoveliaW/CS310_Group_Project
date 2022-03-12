@@ -3,9 +3,9 @@ package edu.jsu.mcis.cs310.tas_sp22;
 import java.sql.Timestamp.*;
 import java.time.LocalDateTime;
 import java.sql.*;
-
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import static java.time.temporal.TemporalQueries.zone;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Punch {
@@ -15,6 +15,7 @@ public class Punch {
    private String badgeid, adjustmenttype;
    private LocalDateTime timestamp;
    private Badge badge;
+   private ArrayList DailyPunchList;
    
    public Punch(HashMap <String, String> params,Badge badge){
         this.id = Integer.parseInt(params.get("id"));
@@ -40,6 +41,7 @@ public class Punch {
         
     }
 
+    
     public Badge getBadge() {
         //System.err.println(badge+"this is what it returns");
         return badge;
