@@ -121,8 +121,11 @@ public class Feature2 {
         /* Get Punch Properties */
         
         String badgeid = p1.getBadge().getId();
+        
         ots = p1.getOriginalTimestamp();
+        System.err.println(ots+ " :this is the time for test 3");
         int terminalid = p1.getTerminalid();
+        System.err.println(terminalid+ " :this is the terminalid for test 3");
         PunchType punchtype = p1.getPunchtype();
 		
         /* Insert Punch Into Database */
@@ -130,7 +133,7 @@ public class Feature2 {
         int punchid = db.insertPunch(p1);
 		
         /* Retrieve New Punch */
-        
+        System.err.println(punchid+ " :this is the punch id for test 3");
         Punch p2 = db.getPunch(punchid);
 		
         /* Compare Punches */
@@ -141,6 +144,7 @@ public class Feature2 {
         
         assertEquals(terminalid, p2.getTerminalid());
         assertEquals(punchtype, p2.getPunchtype());
+        System.err.println(rts.format(dtf)+" test 2 time");
         assertEquals(ots.format(dtf), rts.format(dtf));
         
     }
@@ -181,6 +185,7 @@ public class Feature2 {
         
         assertEquals(terminalid, p2.getTerminalid());
         assertEquals(punchtype, p2.getPunchtype());
+         System.err.println(rts.format(dtf)+" test 4 time");
         assertEquals(ots.format(dtf), rts.format(dtf));
         
     }

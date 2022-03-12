@@ -1,10 +1,11 @@
 package edu.jsu.mcis.cs310.tas_sp22;
-import java.util.Date.*;
+
 import java.sql.Timestamp.*;
 import java.time.LocalDateTime;
 import java.sql.*;
-import java.time.LocalDate;
+
 import java.time.format.DateTimeFormatter;
+import static java.time.temporal.TemporalQueries.zone;
 import java.util.HashMap;
 
 public class Punch {
@@ -32,7 +33,10 @@ public class Punch {
         this.terminalid = terminalid;
         this.eventtypeid = eventtypeid;
         this.badge = badge;
-        this.timestamp = LocalDateTime.now();
+        java.sql.Timestamp timestamp1 = new Timestamp(new java.util.Date().getTime());
+        LocalDateTime local = timestamp1.toLocalDateTime();
+        local = local.withSecond(0).withNano(0);   
+        this.timestamp = local;
         
     }
 

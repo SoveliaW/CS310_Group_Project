@@ -162,7 +162,8 @@ public class TASDatabase {
             e.printStackTrace(); 
         }
         String badgeid =params.get("badgeid");
-                    Badge badge=getBadge(badgeid);
+        Badge badge=getBadge(badgeid);
+        
         Punch Results = new Punch(params,badge);
         return Results;
     } 
@@ -177,19 +178,18 @@ public class TASDatabase {
         Badge badge = p.getBadge();
         String badgeid = badge.getId();
         int eventtypeid = p.getEventtypeid();
-        
-        
+         
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS");
         LocalDateTime now =p.getTimestamp();
-        String currenttime=now.format(dtf);
+        String currenttime =now.format(dtf);
         Timestamp timestamp =Timestamp.valueOf(currenttime);
-        System.err.println(timestamp+" : this is what the time stamp is");
+        
         Employee employee = getEmployee(badge);
          
         int departmentid = employee.getDeptid();
         int terminalid_employee = (getDepartment(departmentid)).getTerminalid();
        
-        boolean test =(terminalid ==terminalid_employee);
+        boolean test =(terminalid ==terminalid_employee||terminalid == 0);
         
         
         if(test){
@@ -223,7 +223,7 @@ public class TASDatabase {
         else{
         return key;
       }
-     
+     System.err.println(key +" this is the key returned by test 3");
      return key;
     }
             
