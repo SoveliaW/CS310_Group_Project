@@ -50,8 +50,11 @@ public class Feature3 {
         /* Add Punches */
         
         p2.add(db.getPunch(4716));
+        
         p2.add(db.getPunch(4811));
+        
         p2.add(db.getPunch(4813));
+        
         p2.add(db.getPunch(4847));
         
         /* Export Punch List #2 Contents to StringBuilder */

@@ -324,11 +324,38 @@ public class TASDatabase {
     } 
     
     public ArrayList<Punch> getDailyPunchList(Badge badge, LocalDate date) {
-       ArrayList DailyPunchList = NULL;
+       ArrayList<Punch> DailyPunches = new ArrayList<>();
+       DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm:SS");
        Badge name = badge;
+       String badgeid =name.getId();
+       //having problem using just the date for timestamp search in query
+       /*
        LocalDate localdate = date;
+       String currenttime =localdate.format(dtf);
+       Timestamp timestamp =Timestamp.valueOf(currenttime);
+       */
+       int result = 0;
+       // ALSO NEED TO FIGURE OUT HOW TO ACCESS ONLY A SPECIFICE DATE FROM Query
+       try{
+           String query= "SELECT * FROM tas_sp22_v1.event WHERE badgeid =? AND timestamp =Between'2018/09/17 00:00:00' AND '2018/09/17 23:59:59';";
+           
+            PreparedStatement pstmt = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+           
+            pstmt.setString(1,badgeid);
+            System.err.println(badgeid);
+            //pstmt.setTimestamp(2,timestamp);
+            //System.err.println(timestamp);
+          
+           
+            result = pstmt.executeUpdate();
+            // NEED TO SAVE MULTIPLE ROWS 
+               
+            }  
+            catch (Exception e){
+            e.printStackTrace(); 
+            }
        
-        return DailyPunchList;
+        return DailyPunches;
     }
     
     public boolean isConnected() {
