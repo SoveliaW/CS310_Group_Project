@@ -35,6 +35,54 @@ public class Shift {
 
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public int getRoundinterval() {
+        return roundinterval;
+    }
+
+    public int getGraceperiod() {
+        return graceperiod;
+    }
+
+    public int getDockpenalty() {
+        return dockpenalty;
+    }
+
+    public int getLunchthreshold() {
+        return lunchthreshold;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public LocalTime getShiftstart() {
+        return shiftstart;
+    }
+
+    public LocalTime getShiftstop() {
+        return shiftstop;
+    }
+
+    public LocalTime getLunchstart() {
+        return lunchstart;
+    }
+
+    public LocalTime getLunchstop() {
+        return lunchstop;
+    }
+
+    public long getShiftmin() {
+        return shiftmin;
+    }
+
+    public long getLunchmin() {
+        return lunchmin;
+    }
+    
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();

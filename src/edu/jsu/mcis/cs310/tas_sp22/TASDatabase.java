@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.*;
 import java.sql.Date;
+import java.time.LocalTime;
 public class TASDatabase {
     
     private final Connection connection;
@@ -366,6 +367,7 @@ public class TASDatabase {
         return DailyPunches;
     }
     
+   
     public boolean isConnected() {
         boolean result = false;
         

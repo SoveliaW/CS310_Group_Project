@@ -3,7 +3,9 @@ package edu.jsu.mcis.cs310.tas_sp22;
 import java.sql.Timestamp.*;
 import java.time.LocalDateTime;
 import java.sql.*;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,7 @@ public class Punch {
    private LocalDateTime timestamp;
    private Badge badge;
    private ArrayList DailyPunchList;
+   private LocalTime localtime;
    
    public Punch(HashMap <String, String> params,Badge badge){
         this.id = Integer.parseInt(params.get("id"));
@@ -24,7 +27,7 @@ public class Punch {
         this.timestamp = LocalDateTime.parse(params.get("timestamp"));
         this.punchtypeid = PunchType.values()[Integer.parseInt(params.get("eventtypeid"))];
         this.badge = badge;
-        
+        this.localtime = LocalTime.parse(params.get("timestamp"));
         
         String dayofweek = timestamp.getDayOfWeek().toString();
         
@@ -41,7 +44,10 @@ public class Punch {
         
     }
 
-    
+    public LocalTime getLocaltime() {
+        return localtime;
+    }
+
     public Badge getBadge() {
         //System.err.println(badge+"this is what it returns");
         return badge;
@@ -67,6 +73,47 @@ public class Punch {
     public PunchType getPunchtype(){
         punchtypeid = null;
         return punchtypeid;
+    }
+    public PunchType getPunchtypeid(){
+        return punchtypeid;
+    }
+     public void adjust(Shift s){
+      LocalTime start =s.getShiftstart();
+      LocalTime stop = s.getShiftstop();
+      LocalTime lunch =s.getLunchstart();
+      LocalTime lunchend =s.getLunchstop();
+      int roundinterval = s.getRoundinterval();
+      int graceperoid =s.getGraceperiod();
+      int dockpenalty =s.getDockpenalty();
+      int lunchtheshold =s.getLunchthreshold();
+      
+      if(getEventtypeid() ==1){
+          //Check for punch in 
+          if (getLocaltime().isBefore(start)){
+              
+              LocalTime withgraceperoid =start.minus(Duration.ofMinutes(15));
+              if(getLocaltime().isBefore(withgraceperoid)){
+                  
+            }
+            }
+          if(getLocaltime().isAfter(start)){
+              
+              
+            }
+        }
+          
+          
+      if(getEventtypeid() == 0){
+          //check for punch out
+        if (getLocaltime().isBefore(stop)){
+              
+              
+            }
+          if(getLocaltime().isAfter(stop)){
+              
+            }
+        }
+      
     }
     
     public String printOriginal() {
