@@ -335,14 +335,13 @@ public class TASDatabase {
        
        
        int result = 0;
-       // ALSO NEED TO FIGURE OUT HOW TO ACCESS ONLY A SPECIFICE DATE FROM Query
+       
        try{
            String query= "SELECT *, DATE(`timestamp`) AS tsdate FROM tas_sp22_v1.event WHERE badgeid=? HAVING tsdate=? ORDER BY `timestamp`";
            
             PreparedStatement pstmt = connection.prepareStatement(query);
            
             pstmt.setString(1,badgeid);
-          
             pstmt.setDate(2,localdate); 
             
               
@@ -358,8 +357,7 @@ public class TASDatabase {
                     DailyPunches.add(getPunch(id));
                     
                 }
-            }
-               
+            } 
             }  
             catch (Exception e){
             e.printStackTrace(); 
