@@ -330,24 +330,35 @@ public class TASDatabase {
        String badgeid =name.getId();
        //having problem using just the date for timestamp search in query
        
-      
+      HashMap<String,Integer> params = new HashMap<>();
        Date localdate = Date.valueOf(date);
        
        
        int result = 0;
        // ALSO NEED TO FIGURE OUT HOW TO ACCESS ONLY A SPECIFICE DATE FROM Query
        try{
-           String query= "SELECT *, DATE(`timestamp`) AS tsdate FROM tas_sp22_v1.event WHERE badgeid='?' HAVING tsdate='?' ORDER BY `timestamp`;";
+           String query= "SELECT *, DATE(`timestamp`) AS tsdate FROM tas_sp22_v1.event WHERE badgeid=? HAVING tsdate=? ORDER BY `timestamp`";
            
-            PreparedStatement pstmt = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstmt = connection.prepareStatement(query);
            
             pstmt.setString(1,badgeid);
-            pstmt.setDate(2,localdate);
-            
           
-           
-            result = pstmt.executeUpdate();
-            // NEED TO SAVE MULTIPLE ROWS 
+            pstmt.setDate(2,localdate); 
+            
+              
+             boolean pstmtExe = pstmt.execute();
+
+            if (pstmtExe) {
+                    
+                ResultSet resultset = pstmt.getResultSet();
+                
+                while(resultset.next()) {
+                    params.put("id",(resultset.getInt("id")));
+                    int id= params.get("id");
+                    DailyPunches.add(getPunch(id));
+                    
+                }
+            }
                
             }  
             catch (Exception e){
