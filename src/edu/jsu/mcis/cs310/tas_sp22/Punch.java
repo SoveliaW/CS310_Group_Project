@@ -95,28 +95,29 @@ public class Punch {
               LocalTime withgraceperoid =start.minus(Duration.ofMinutes(graceperoid));
               if(getLocaltime().isBefore(withgraceperoid)){
                   
+                }
             }
-              
+               
           if(getLocaltime().isAfter(start)){
               
               
             }
-        }
-          
+        
+        }  
           
       if(getEventtypeid() == 0){
           //check for punch out
-        if (getLocaltime().isBefore(stop)){
+            if (getLocaltime().isBefore(stop)){
               
               
             }
-          if(getLocaltime().isAfter(stop)){
+            if(getLocaltime().isAfter(stop)){
               
             }
         }
       
-    }
     
+    }
     public String printOriginal() {
         
         // "#D2C39273 CLOCK IN: WED 09/05/2018 07:00:07"
