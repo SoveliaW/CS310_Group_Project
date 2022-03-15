@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class Punch {
     
@@ -19,6 +20,7 @@ public class Punch {
    private Badge badge;
    private ArrayList DailyPunchList;
    private LocalTime localtime;
+   LocalTime NewClockinTime;
    
    public Punch(HashMap <String, String> params,Badge badge){
         this.id = Integer.parseInt(params.get("id"));
@@ -27,8 +29,9 @@ public class Punch {
         this.timestamp = LocalDateTime.parse(params.get("timestamp"));
         this.punchtypeid = PunchType.values()[Integer.parseInt(params.get("eventtypeid"))];
         this.badge = badge;
+        System.err.println("Error accured hereon next line");
         this.localtime = LocalTime.parse(params.get("timestamp"));
-        
+        System.err.println("Error did not accur");
         String dayofweek = timestamp.getDayOfWeek().toString();
         
     }
@@ -87,22 +90,32 @@ public class Punch {
       int graceperoid =s.getGraceperiod();
       int dockpenalty =s.getDockpenalty();
       int lunchtheshold =s.getLunchthreshold();
+      LocalTime Currentpunchtime = getLocaltime();
+      System.err.println("Checking to see if logic gate passed ");
       
       if(getEventtypeid() ==1){
           //Check for punch in 
-          if (getLocaltime().isBefore(start)){
-              
+          if (Currentpunchtime.isBefore(start)||Currentpunchtime.isAfter(start)){
+              System.err.println("Checking to see if logic gate passed ");
               LocalTime withgraceperoid =start.minus(Duration.ofMinutes(graceperoid));
-              if(getLocaltime().isBefore(withgraceperoid)){
+              LocalTime Plusgraceperoid = start.plus(Duration.ofMinutes(graceperoid));
+              if(Currentpunchtime.isBefore(withgraceperoid)||Currentpunchtime.isAfter(Plusgraceperoid)){
+                  
+                  //outside of bounds for grace peroid
                   
                 }
+              else{
+                    Long Diffrence= MINUTES.between(Currentpunchtime,start);
+                  if(Currentpunchtime.isBefore(start)){
+                       NewClockinTime = Currentpunchtime.plus(Duration.ofMinutes(Diffrence));
+                  }
+                  if(Currentpunchtime.isAfter(start)){
+                      NewClockinTime = Currentpunchtime.minus(Duration.ofMinutes(Diffrence));
+                  }
+                 
+              }
             }
-               
-          if(getLocaltime().isAfter(start)){
-              
-              
-            }
-        
+           
         }  
           
       if(getEventtypeid() == 0){
@@ -131,6 +144,18 @@ public class Punch {
 
         return s.toString().toUpperCase();
     }
-    
+    public String printAdjusted() {
+        
+        // "#D2C39273 CLOCK IN: WED 09/05/2018 07:00:07"
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
+        
+        StringBuilder s = new StringBuilder();
+        s.append("#").append(badgeid).append(' ').append(punchtypeid);
+        s.append(": ").append(NewClockinTime.format(dtf));
+        s.append("badge is: "+badge);
+
+        return s.toString().toUpperCase();
   
+}
 }
