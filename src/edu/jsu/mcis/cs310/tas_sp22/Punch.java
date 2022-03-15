@@ -77,6 +77,7 @@ public class Punch {
     public PunchType getPunchtypeid(){
         return punchtypeid;
     }
+    
      public void adjust(Shift s){
       LocalTime start =s.getShiftstart();
       LocalTime stop = s.getShiftstop();
@@ -91,11 +92,11 @@ public class Punch {
           //Check for punch in 
           if (getLocaltime().isBefore(start)){
               
-              LocalTime withgraceperoid =start.minus(Duration.ofMinutes(15));
+              LocalTime withgraceperoid =start.minus(Duration.ofMinutes(graceperoid));
               if(getLocaltime().isBefore(withgraceperoid)){
                   
             }
-            }
+              
           if(getLocaltime().isAfter(start)){
               
               
