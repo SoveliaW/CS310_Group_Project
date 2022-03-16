@@ -1,18 +1,14 @@
 package edu.jsu.mcis.cs310.tas_sp22;
 
-import java.sql.Timestamp.*;
+
 import java.time.LocalDateTime;
 import java.sql.*;
-import java.time.Duration;
-import java.time.LocalDate;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.sql.Date;
-import java.sql.Time;
 import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class Punch {
@@ -90,10 +86,10 @@ public class Punch {
         int r = minutes % roundinterval; // r stands for remainder
 
         if (r < (roundinterval/2)) {
-            return adjustedtime = time.minusMinutes(r).withSecond(0);
+            return adjustedtime = time.minusMinutes(r).withSecond(0).withNano(0);
         } 
         else {
-            return adjustedtime = time.plusMinutes(roundinterval - r).withSecond(0);
+            return adjustedtime = time.plusMinutes(roundinterval - r).withSecond(0).withNano(0);
         }
     }
 
@@ -111,14 +107,16 @@ public class Punch {
         adjustmenttype = "(None)";
         int timediff = 0;
         
-        if (timestamp.get(ChronoField.DAY_OF_WEEK) == 6 || timestamp.get(ChronoField.DAY_OF_WEEK) == 7) {
+        DayOfWeek day = timestamp.getDayOfWeek();
+        
+        if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
             adjustedtime = roundInterval(roundinterval,time);
             adjustmenttype = "(Interval Round)";
             
         }
         else {
-
-            if (getEventtypeid() == 1) { //Clock in
+            //PunchType.CLOCK_IN
+            if (punchtypeid == PunchType.CLOCK_IN) { //Clock in
 
                 timediff = Math.abs((int)MINUTES.between(time, shiftstart)); //Mintues between clock in and start of shift
                 System.err.println("Time diff is: " + timediff);
@@ -160,7 +158,7 @@ public class Punch {
 
 
 
-            if (getEventtypeid() == 0) { //Clock out
+            if (punchtypeid == PunchType.CLOCK_OUT) { //Clock out
 
                 timediff = Math.abs((int)MINUTES.between(time, shiftstop)); //Mintues between clock out and end of shift
                 System.err.println("Time diff is: " + timediff);

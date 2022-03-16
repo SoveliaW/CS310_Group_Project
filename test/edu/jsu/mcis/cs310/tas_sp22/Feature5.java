@@ -11,7 +11,7 @@ public class Feature5 {
     @Before
     public void setup() {
         
-        db = new TASDatabase();
+       db = new TASDatabase("tasuser", "PASSWORD", "localhost");
         
     }
     

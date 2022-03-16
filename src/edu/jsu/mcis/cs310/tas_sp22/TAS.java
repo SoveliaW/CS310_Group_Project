@@ -17,4 +17,8 @@ public class TAS {
             System.err.println("Connected Successfully!");
         }
     }
+    public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift)
+    {
+        
+    }
 }
