@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class Punch {
@@ -18,20 +20,18 @@ public class Punch {
     private int terminalid, id, eventtypeid;
     private PunchType punchtypeid;
     private String badgeid, adjustmenttype;
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp, adjustedtimestamp;
     private Badge badge;
     private ArrayList DailyPunchList;
-    private LocalTime localtime;
-    private LocalTime NewClockinTime, time;
-    private Date date;
-    private Time newtime;
-    private Timestamp NewTimestamp;
+    private LocalTime time, adjustedtime;
+
 
     public Punch(HashMap<String, String> params, Badge badge) {
         this.id = Integer.parseInt(params.get("id"));
         this.terminalid = Integer.parseInt(params.get("terminalid"));
         this.badgeid = params.get("badgeid");
         this.timestamp = LocalDateTime.parse(params.get("timestamp"));
+        this.eventtypeid = Integer.parseInt(params.get("eventtypeid"));
         this.punchtypeid = PunchType.values()[Integer.parseInt(params.get("eventtypeid"))];
         this.badge = badge;
 
@@ -57,7 +57,6 @@ public class Punch {
     }
 
     public Badge getBadge() {
-        //System.err.println(badge+"this is what it returns");
         return badge;
     }
 
@@ -85,109 +84,128 @@ public class Punch {
     public PunchType getPunchtypeid() {
         return punchtypeid;
     }
+    
+    public LocalTime roundInterval(int roundinterval, LocalTime time) {
+        int minutes = time.getMinute();
+        int r = minutes % roundinterval; // r stands for remainder
 
-    public void adjust(Shift s) {
-        LocalTime start = s.getShiftstart();
-        LocalTime stop = s.getShiftstop();
+        if (r < (roundinterval/2)) {
+            return adjustedtime = time.minusMinutes(r).withSecond(0);
+        } 
+        else {
+            return adjustedtime = time.plusMinutes(roundinterval - r).withSecond(0);
+        }
+    }
+
+    public void adjust (Shift s) {
+        LocalTime shiftstart = s.getShiftstart();
+        LocalTime shiftstop = s.getShiftstop();
         LocalTime lunchstart = s.getLunchstart();
-        LocalTime lunchend = s.getLunchstop();
+        LocalTime lunchstop = s.getLunchstop();
         int roundinterval = s.getRoundinterval();
-        int graceperoid = s.getGraceperiod();
+        int graceperiod = s.getGraceperiod();
         int dockpenalty = s.getDockpenalty();
-        int lunchtheshold = s.getLunchthreshold();
-        LocalTime Currentpunchtime = getLocaltime();
-        //System.err.println("Checking to see if logic gate passed ");
+        int lunchthreshold = s.getLunchthreshold();
 
-        if (getEventtypeid() == 1) {
-            //Check for punch in 
-            // punch in also includes   lunch punch as a clock in punch 
-            // need a logic gate to test if its
-            if (Currentpunchtime.isAfter(lunchstart)) {
-                LocalTime withgraceperoid = lunchend.minus(Duration.ofMinutes(graceperoid));
-                LocalTime Plusgraceperoid = lunchend.plus(Duration.ofMinutes(graceperoid));
+        LocalTime time = getTimestamp().toLocalTime();
+        adjustmenttype = "(None)";
+        int timediff = 0;
+        
+        if (timestamp.get(ChronoField.DAY_OF_WEEK) == 6 || timestamp.get(ChronoField.DAY_OF_WEEK) == 7) {
+            adjustedtime = roundInterval(roundinterval,time);
+            adjustmenttype = "(Interval Round)";
+            
+        }
+        else {
 
-                if (Currentpunchtime.isBefore(withgraceperoid) || Currentpunchtime.isAfter(Plusgraceperoid)) {
+            if (getEventtypeid() == 1) { //Clock in
 
-                    //outside of bounds for grace peroid
-                } else {
-                    Long Difference = MINUTES.between(Currentpunchtime, lunchend);
-                    if (Currentpunchtime.isBefore(lunchend)) {
-                        NewClockinTime = Currentpunchtime.plus(Duration.ofMinutes(Difference));
+                timediff = Math.abs((int)MINUTES.between(time, shiftstart)); //Mintues between clock in and start of shift
+                System.err.println("Time diff is: " + timediff);
+
+                if (time.isBefore(shiftstart)) { //Before shift start
+                    if (timediff <= graceperiod || timediff <= roundinterval) { //Grace Period
+                        adjustedtime = shiftstart;
+                        adjustmenttype = "(Shift Start)";
                     }
-                    if (Currentpunchtime.isAfter(lunchend)) {
-                        NewClockinTime = Currentpunchtime.minus(Duration.ofMinutes(Difference));
+                    else { //Round interval
+                        adjustedtime = roundInterval(roundinterval,time);
+                        adjustmenttype = "(Interval Round)";
                     }
                 }
-            } else if (Currentpunchtime.isBefore(start) || Currentpunchtime.isAfter(start)) {
-                System.err.println("Checking to see if logic gate passed ");
 
-                LocalTime withgraceperoid = start.minus(Duration.ofMinutes(graceperoid));
-                LocalTime Plusgraceperoid = start.plus(Duration.ofMinutes(graceperoid));
-
-                if (Currentpunchtime.isBefore(withgraceperoid) || Currentpunchtime.isAfter(Plusgraceperoid)) {
-
-                    //outside of bounds for grace peroid
-                } else {
-                    Long Difference = MINUTES.between(Currentpunchtime, start);
-                    if (Currentpunchtime.isBefore(start)) {
-                        NewClockinTime = Currentpunchtime.plus(Duration.ofMinutes(Difference));
+                else if (time.isAfter(shiftstart) && time.isBefore(lunchstart)) { //After shift start, but before lunch start
+                    if (timediff < 1 || timediff == 60) {
+                        adjustedtime = time.withSecond(0);
                     }
-                    if (Currentpunchtime.isAfter(start)) {
-                        NewClockinTime = Currentpunchtime.minus(Duration.ofMinutes(Difference));
+                    else if (timediff <= graceperiod) { //Grace Period
+                        adjustedtime = shiftstart;
+                        adjustmenttype = "(Shift Start)";
                     }
+                    else if (timediff >= graceperiod && timediff <= dockpenalty) { //Dock Penalty
+                        adjustedtime = shiftstart.plusMinutes(dockpenalty);
+                        adjustmenttype = "(Shift Dock)";
+                    }
+                    else if (timediff >= dockpenalty) {
+                        adjustedtime = roundInterval(roundinterval,time);
+                        adjustmenttype = "(Interval Round)";
+                    }
+                }
+
+                if (time.isAfter(lunchstart) && time.isBefore(lunchstop)) {
+                    adjustedtime = lunchstop;
+                    adjustmenttype = "(Lunch Stop)";
+                }
+            }
+
+
+
+            if (getEventtypeid() == 0) { //Clock out
+
+                timediff = Math.abs((int)MINUTES.between(time, shiftstop)); //Mintues between clock out and end of shift
+                System.err.println("Time diff is: " + timediff);
+
+                if (time.isAfter(shiftstop)) { //After shift stop
+                    if (timediff < 1 || timediff == 60) { //Are the seconds between 0:00 and 0:59
+                        adjustedtime = time.withSecond(0);
+                    }
+                    else if (timediff <= graceperiod || timediff <= roundinterval) { //Grace Period
+                        adjustedtime = shiftstop;
+                        adjustmenttype = "(Shift Stop)";
+                    }
+                    else /*if (timediff > roundinterval)*/ { //Round interval
+                        adjustedtime = roundInterval(roundinterval,time);
+                        adjustmenttype = "(Interval Round)";
+                    }
+                }
+
+                else if (time.isAfter(lunchstop) && time.isBefore(shiftstop)) { //After lunch start, but before shift stop
+                    if (timediff <= graceperiod) { //Grace Period
+                        adjustedtime = shiftstop;
+                        adjustmenttype = "(Shift Stop)";
+                    }
+                    if (timediff >= graceperiod && timediff <= dockpenalty) { //Dock Penalty
+                        adjustedtime = shiftstop.minusMinutes(dockpenalty);
+                        adjustmenttype = "(Shift Dock)";
+                    }
+                    else if (timediff >= dockpenalty) {
+                        adjustedtime = roundInterval(roundinterval,time);
+                        adjustmenttype = "(Interval Round)";
+                    }
+                }
+
+                else if (time.isAfter(lunchstart) && time.isBefore(lunchstop)) {
+                    adjustedtime = lunchstart;
+                    adjustmenttype = "(Lunch Start)";
                 }
             }
         }
+        
+        adjustedtimestamp = LocalDateTime.of(timestamp.toLocalDate(), adjustedtime);
 
-        if (getEventtypeid() == 0) {
-            //check for punch out
-            if (Currentpunchtime.isBefore(lunchend)) {
-                LocalTime withgraceperoid = lunchstart.minus(Duration.ofMinutes(graceperoid));
-                LocalTime Plusgraceperoid = lunchstart.plus(Duration.ofMinutes(graceperoid));
-
-                if (Currentpunchtime.isBefore(withgraceperoid) || Currentpunchtime.isAfter(Plusgraceperoid)) {
-
-                    //outside of bounds for grace peroid
-                } else {
-                    Long Difference = MINUTES.between(Currentpunchtime, lunchstart);
-                    if (Currentpunchtime.isBefore(lunchstart)) {
-                        NewClockinTime = Currentpunchtime.plus(Duration.ofMinutes(Difference));
-                    }
-                    if (Currentpunchtime.isAfter(lunchstart)) {
-                        NewClockinTime = Currentpunchtime.minus(Duration.ofMinutes(Difference));
-                    }
-                }
-            } 
-            else if (Currentpunchtime.isBefore(stop) || Currentpunchtime.isAfter(stop)) {
-                System.err.println("Checking to see if logic gate passed ");
-
-                LocalTime withgraceperoid = stop.minus(Duration.ofMinutes(graceperoid));
-                LocalTime Plusgraceperoid = stop.plus(Duration.ofMinutes(graceperoid));
-
-                if (Currentpunchtime.isBefore(withgraceperoid) || Currentpunchtime.isAfter(Plusgraceperoid)) {
-
-                    //outside of bounds for grace peroid
-                } else {
-                    Long Difference = MINUTES.between(Currentpunchtime, stop);
-                    if (Currentpunchtime.isBefore(stop)) {
-                        NewClockinTime = Currentpunchtime.plus(Duration.ofMinutes(Difference));
-                    }
-                    if (Currentpunchtime.isAfter(stop)) {
-                        NewClockinTime = Currentpunchtime.minus(Duration.ofMinutes(Difference));
-                    }
-                }
-            }
-        }
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
     }
-
-    public Timestamp getNewTimestamp() {
-        newtime = Time.valueOf(NewClockinTime);
-        String d = String.valueOf(timestamp);
-        LocalDate Date = LocalDate.parse(d);
-        NewTimestamp = Timestamp.valueOf(d + newtime);
-        // Trying to convert newtime created back into a timestamp with date.
-        return NewTimestamp;
-    }
+      
 
     public String printOriginal() {
 
@@ -204,17 +222,15 @@ public class Punch {
 
     public String printAdjusted() {
 
-        // "#D2C39273 CLOCK IN: WED 09/05/2018 07:00:07"
+        // "#08D01475 CLOCK IN: TUE 09/18/2018 12:00:00 (Shift Start)"
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
 
         StringBuilder s = new StringBuilder();
         s.append("#").append(badgeid).append(' ').append(punchtypeid);
-        // there is a problem with how i created the new timestamp with the old date and new time
-        s.append(": ").append(NewClockinTime.format(dtf));
-        s.append("badge is: " + badge);
-
-        // need to format the new time backinto the timestamp 
-        return s.toString().toUpperCase();
+        s.append(": ").append(adjustedtimestamp.format(dtf).toUpperCase());
+        s.append(' ').append(adjustmenttype);     
+        
+        return s.toString();
 
     }
 }

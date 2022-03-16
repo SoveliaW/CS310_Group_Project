@@ -69,7 +69,6 @@ public class TASDatabase {
             e.printStackTrace();
         }
         
-        
         return getBadge(badgeid);
     } 
    
@@ -140,7 +139,7 @@ public class TASDatabase {
         HashMap<String, String> params = new HashMap<>();
         
         try{
-            String query= "SELECT * FROM tas_sp22_v1.event WHERE id =?";
+            String query = "SELECT * FROM tas_sp22_v1.event WHERE id =?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1,id);
          
@@ -164,8 +163,8 @@ public class TASDatabase {
         catch(Exception e) {
             e.printStackTrace(); 
         }
-        String badgeid =params.get("badgeid");
-        Badge badge=getBadge(badgeid);
+        String badgeid = params.get("badgeid");
+        Badge badge = getBadge(badgeid);
         
         Punch Results = new Punch(params,badge);
         return Results;
@@ -184,9 +183,9 @@ public class TASDatabase {
          
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS");
         
-        LocalDateTime now =p.getTimestamp();
-        String currenttime =now.format(dtf);
-        Timestamp timestamp =Timestamp.valueOf(currenttime);
+        LocalDateTime now = p.getTimestamp();
+        String currenttime = now.format(dtf);
+        Timestamp timestamp = Timestamp.valueOf(currenttime);
         
         Employee employee = getEmployee(badge);
          
@@ -216,19 +215,19 @@ public class TASDatabase {
                     
                     if (keys.next()) { 
                         key = keys.getInt(1); 
-                        
                     }
                 }
             }  
             catch (Exception e){
-            e.printStackTrace(); 
+                e.printStackTrace(); 
             }
-       }
+        }
         else{
+            return key;
+        }
+        
+        System.err.println(key +" this is the key returned by test 3");
         return key;
-      }
-     System.err.println(key +" this is the key returned by test 3");
-     return key;
     }
             
     public Shift getShift(int id) {       //getShift that takes an int id as a parameter
@@ -339,7 +338,7 @@ public class TASDatabase {
        int result = 0;
        
        try{
-           String query= "SELECT *, DATE(`timestamp`) AS tsdate FROM tas_sp22_v1.event WHERE badgeid=? HAVING tsdate=? ORDER BY `timestamp`";
+            String query= "SELECT *, DATE(`timestamp`) AS tsdate FROM tas_sp22_v1.event WHERE badgeid=? HAVING tsdate=? ORDER BY `timestamp`";
            
             PreparedStatement pstmt = connection.prepareStatement(query);
            
@@ -347,7 +346,7 @@ public class TASDatabase {
             pstmt.setDate(2,localdate); 
             
               
-             boolean pstmtExe = pstmt.execute();
+            boolean pstmtExe = pstmt.execute();
 
             if (pstmtExe) {
                     
