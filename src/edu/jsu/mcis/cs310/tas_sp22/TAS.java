@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import static java.time.temporal.ChronoUnit.MINUTES;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -22,10 +23,19 @@ public class TAS {
         }
     }
     public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift)
+            
     {
-        int punches = 0;
-        
+        LocalDateTime time;
+        ArrayList <Punch>p1 = dailypunchlist;
+        for (Punch p: p1 ){
+            
+            time = p.getAdjustedTimestamp();
+        }
+           
+        int min = 0;
+        min = Math.abs((int)MINUTES.between(, ));
         System.err.println("This is the Punches for that day" +dailypunchlist);
-        return punches;
+        
+        return min;
     }
 }

@@ -203,6 +203,9 @@ public class Punch {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
     }
+    public LocalDateTime getAdjustedTimestamp(){
+        return adjustedtimestamp;
+    }
       
 
     public String printOriginal() {
