@@ -119,7 +119,7 @@ public class Punch {
             if (punchtypeid == PunchType.CLOCK_IN) { //Clock in
 
                 timediff = Math.abs((int)MINUTES.between(time, shiftstart)); //Mintues between clock in and start of shift
-                System.err.println("Time diff is: " + timediff);
+                //System.err.println("Time diff is: " + timediff);
 
                 if (time.isBefore(shiftstart)) { //Before shift start
                     if (timediff <= graceperiod || timediff <= roundinterval) { //Grace Period
@@ -217,7 +217,7 @@ public class Punch {
 
         return s.toString().toUpperCase();
     }
-
+    
     public String printAdjusted() {
 
         // "#08D01475 CLOCK IN: TUE 09/18/2018 12:00:00 (Shift Start)"
@@ -231,4 +231,9 @@ public class Punch {
         return s.toString();
 
     }
+    
+    @Override
+    public String toString() {
+        return printAdjusted();
+}
 }
