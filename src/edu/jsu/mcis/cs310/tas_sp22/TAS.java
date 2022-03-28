@@ -3,6 +3,7 @@ package edu.jsu.mcis.cs310.tas_sp22;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,6 +20,9 @@ public class TAS {
     }
     public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift)
     {
+        int punches = 0;
         
+        System.err.println("This is the Punches for that day" +dailypunchlist);
+        return punches;
     }
 }
