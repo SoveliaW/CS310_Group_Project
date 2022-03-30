@@ -47,10 +47,12 @@ public class Employee {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
+        
         s.append("#").append(badgeid).append(" (").append(lastname).append(", ");
         s.append(firstname).append(" ").append(middlename).append("): ").append("employeetypeid: ");
         s.append(employeetypeid).append(", departmentid: ").append(deptid).append(", shiftid: ");
         s.append(shiftid).append(", active: ").append(active).append(", inactive: ").append(inactive);
+        
         return s.toString();
     }
     

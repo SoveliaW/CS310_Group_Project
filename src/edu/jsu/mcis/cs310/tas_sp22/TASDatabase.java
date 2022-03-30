@@ -43,6 +43,7 @@ public class TASDatabase {
         }
         
         Badge result = new Badge(id, des);
+        
         return result;
     } 
      
@@ -61,10 +62,10 @@ public class TASDatabase {
                 
                 while(resultset.next()){
                     badgeid = resultset.getString(1);
-                    
                 }
             }
         }
+        
         catch (Exception e) { 
             e.printStackTrace();
         }
@@ -100,11 +101,13 @@ public class TASDatabase {
                 }
             }
         }
+        
         catch(Exception e) {
             e.printStackTrace(); 
         }
         
         Employee employee = new Employee(params);
+        
         return employee;
     }
     
@@ -128,6 +131,7 @@ public class TASDatabase {
                 }
             }
         }
+        
         catch (Exception e) { 
             e.printStackTrace();
         }
@@ -155,11 +159,10 @@ public class TASDatabase {
                     params.put("eventtypeid",String.valueOf(resultset.getInt("eventtypeid")));
                     params.put("timestamp", resultset.getTimestamp("timestamp").toLocalDateTime().toString());
                     params.put("badgeid", resultset.getString("badgeid"));
-                   
                 }
             }
-          
         }
+        
         catch(Exception e) {
             e.printStackTrace(); 
         }
@@ -167,6 +170,7 @@ public class TASDatabase {
         Badge badge = getBadge(badgeid);
         
         Punch Results = new Punch(params,badge);
+        
         return Results;
     } 
     
@@ -222,11 +226,13 @@ public class TASDatabase {
                 e.printStackTrace(); 
             }
         }
+        
         else{
             return key;
         }
         
         System.err.println(key +" this is the key returned by test 3");
+        
         return key;
     }
             
@@ -257,13 +263,13 @@ public class TASDatabase {
                     params.put("lunchthreshold", String.valueOf(resultset.getInt("lunchthreshold")));
                 }
             }
-           
         }
        
         catch(Exception e) {
             e.printStackTrace(); 
         }
         Shift Results = new Shift(params);
+        
         return Results;
     }
     
@@ -291,6 +297,7 @@ public class TASDatabase {
             e.printStackTrace();
         }
         int shiftid = Integer.parseInt(params.get("shiftid"));
+        
         return getShift(shiftid);
     }
     
@@ -321,6 +328,7 @@ public class TASDatabase {
         }
         
         Department Results = new Department(params);
+        
         return Results;
     } 
     
@@ -359,22 +367,23 @@ public class TASDatabase {
                     
                 }
             } 
-            }  
-            catch (Exception e){
+        }  
+       
+        catch (Exception e){
             e.printStackTrace(); 
-            }
+        }
        
         return DailyPunches;
     }
     
-   
     public boolean isConnected() {
         boolean result = false;
         
         try {
             
-            if ( !(connection == null) )
+            if ( !(connection == null) ){
                 result = !(connection.isClosed());
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -398,6 +407,7 @@ public class TASDatabase {
 
                 c = DriverManager.getConnection(url, u, p);
             }
+            
             catch (Exception e) {
                 e.printStackTrace();
             }  

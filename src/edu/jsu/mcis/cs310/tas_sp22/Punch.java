@@ -112,7 +112,6 @@ public class Punch {
         if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
             adjustedtime = roundInterval(roundinterval,time);
             adjustmenttype = "(Interval Round)";
-            
         }
         else {
             
@@ -155,8 +154,6 @@ public class Punch {
                     adjustmenttype = "(Lunch Stop)";
                 }
             }
-
-
 
             if (punchtypeid == PunchType.CLOCK_OUT) { //Clock out
 
@@ -203,20 +200,19 @@ public class Punch {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
     }
+    
     public LocalDateTime getAdjustedTimestamp(){
         return adjustedtimestamp;
     }
       
 
     public String printOriginal() {
-
-        
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
+         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
 
         StringBuilder s = new StringBuilder();
         s.append("#").append(badgeid).append(' ').append(punchtypeid);
         s.append(": ").append(timestamp.format(dtf));
-        //s.append("badge is: " + badge);
+        
 
         return s.toString().toUpperCase();
     }
@@ -232,7 +228,6 @@ public class Punch {
         s.append(' ').append(adjustmenttype);     
         
         return s.toString();
-
     }
     
     @Override

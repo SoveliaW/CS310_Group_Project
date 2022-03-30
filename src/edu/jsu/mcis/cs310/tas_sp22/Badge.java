@@ -22,7 +22,8 @@ public class Badge {
     public String toString(){
         StringBuilder s = new StringBuilder();
         
-        s.append("#").append(id).append(" ").append("(").append(description).append(")");;
+        s.append("#").append(id).append(" ").append("(").append(description).append(")");
+        
         return s.toString();
     }
 }
