@@ -83,13 +83,13 @@ public class Punch {
     
     public LocalTime roundInterval(int roundinterval, LocalTime time) {
         int minutes = time.getMinute();
-        int r = minutes % roundinterval; // r stands for remainder
+        int remainder = minutes % roundinterval;
 
-        if (r < (roundinterval/2)) {
-            return adjustedtime = time.minusMinutes(r).withSecond(0).withNano(0);
+        if (remainder < (roundinterval/2)) {
+            return adjustedtime = time.minusMinutes(remainder).withSecond(0).withNano(0);
         } 
         else {
-            return adjustedtime = time.plusMinutes(roundinterval - r).withSecond(0).withNano(0);
+            return adjustedtime = time.plusMinutes(roundinterval - remainder).withSecond(0).withNano(0);
         }
     }
 
@@ -115,11 +115,11 @@ public class Punch {
             
         }
         else {
-            //PunchType.CLOCK_IN
+            
             if (punchtypeid == PunchType.CLOCK_IN) { //Clock in
 
                 timediff = Math.abs((int)MINUTES.between(time, shiftstart)); //Mintues between clock in and start of shift
-                //System.err.println("Time diff is: " + timediff);
+                
 
                 if (time.isBefore(shiftstart)) { //Before shift start
                     if (timediff <= graceperiod || timediff <= roundinterval) { //Grace Period
@@ -210,7 +210,7 @@ public class Punch {
 
     public String printOriginal() {
 
-        // "#D2C39273 CLOCK IN: WED 09/05/2018 07:00:07"
+        
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
 
         StringBuilder s = new StringBuilder();
@@ -223,7 +223,7 @@ public class Punch {
     
     public String printAdjusted() {
 
-        // "#08D01475 CLOCK IN: TUE 09/18/2018 12:00:00 (Shift Start)"
+        
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
 
         StringBuilder s = new StringBuilder();

@@ -175,7 +175,7 @@ public class TASDatabase {
         int key = 0;
         ResultSet keys;
          
-        //Punch p1 = new Punch(103, db.getBadge("021890C0"), 1);
+        
         int terminalid = p.getTerminalid();
         Badge badge = p.getBadge();
         String badgeid = badge.getId();
@@ -230,7 +230,7 @@ public class TASDatabase {
         return key;
     }
             
-    public Shift getShift(int id) {       //getShift that takes an int id as a parameter
+    public Shift getShift(int id) {       
         HashMap<String, String> params = new HashMap<>();
         try {
             
@@ -267,7 +267,7 @@ public class TASDatabase {
         return Results;
     }
     
-    public Shift getShift(Badge badge) {       //getShift that takes a Badge id as a parameter
+    public Shift getShift(Badge badge) {       
         String badgeid = badge.getId();
         int id_int = 0;
         HashMap<String, String> params = new HashMap<>();
@@ -329,7 +329,7 @@ public class TASDatabase {
        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
        Badge name = badge;
        String badgeid =name.getId();
-       //having problem using just the date for timestamp search in query
+       
        
       HashMap<String,Integer> params = new HashMap<>();
        Date localdate = Date.valueOf(date);

@@ -27,9 +27,9 @@ public class Shift {
         this.lunchstop = LocalTime.parse(params.get("lunchstop"));
         this.lunchthreshold = Integer.parseInt(params.get("lunchthreshold"));
        
-        // The minutes between the shift start and stop
+        
         this.shiftmin = java.time.Duration.between(shiftstart,shiftstop).toMinutes();
-        // The minutes between the lunch start and stop
+        
         this.lunchmin = java.time.Duration.between(lunchstart,lunchstop).toMinutes();
         
 

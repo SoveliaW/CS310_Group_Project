@@ -25,8 +25,7 @@ public class Department {
         return terminalid;
     }
     public String toString() {
-        //("#1 (Assembly): terminalid: 103", d1.toString());
-    
+        
         StringBuilder s = new StringBuilder();
         s.append("#").append(id).append(" (").append(description).append("): ").append("terminalid: ");
         s.append(terminalid);
