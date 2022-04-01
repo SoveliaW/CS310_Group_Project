@@ -32,7 +32,8 @@ public class Punch {
         this.badge = badge;
 
         this.time = timestamp.toLocalTime();
-
+        
+        
         String dayofweek = timestamp.getDayOfWeek().toString();
 
     }
@@ -46,6 +47,10 @@ public class Punch {
         local = local.withSecond(0).withNano(0);
         this.timestamp = local;
 
+    }
+
+    public int getId() {
+        return id;
     }
 
     public LocalTime getLocaltime() {
@@ -158,7 +163,7 @@ public class Punch {
             if (punchtypeid == PunchType.CLOCK_OUT) { //Clock out
 
                 timediff = Math.abs((int)MINUTES.between(time, shiftstop)); //Mintues between clock out and end of shift
-                System.err.println("Time diff is: " + timediff);
+                
 
                 if (time.isAfter(shiftstop)) { //After shift stop
                     if (timediff < 1 || timediff == 60) { //Are the seconds between 0:00 and 0:59
@@ -201,10 +206,13 @@ public class Punch {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
     }
     
-    public LocalDateTime getAdjustedTimestamp(){
-        return adjustedtimestamp;
+    public LocalTime getAdjustedTimestamp(){
+        LocalTime adjusted = adjustedtime;
+        return adjusted;
     }
-      
+    public String getAdjustmenttype(){
+        return adjustmenttype;
+    }
 
     public String printOriginal() {
          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");

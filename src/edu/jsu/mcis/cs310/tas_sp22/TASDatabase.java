@@ -23,7 +23,7 @@ public class TASDatabase {
         String id = null, des = null;
      
         try {
-            String query = "Select *FROM Badge WHERE id = ?;";
+            String query = "Select *FROM Badge WHERE id = ? ;";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, badgeid);
             
@@ -32,7 +32,7 @@ public class TASDatabase {
             if (ptExe) {
                 ResultSet resultset = pstmt.getResultSet();
                 
-                while(resultset.next()){
+                while (resultset.next()){
                     id = resultset.getString(1);
                     des = resultset.getString(2);
                 }
@@ -51,7 +51,7 @@ public class TASDatabase {
         String badgeid = null;
      
         try {
-            String query = "Select *FROM Event Where id = ?;";
+            String query = "Select *FROM Event Where id = ? ;";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, punchid);
             
@@ -60,7 +60,7 @@ public class TASDatabase {
             if (ptExe) {
                 ResultSet resultset = pstmt.getResultSet();
                 
-                while(resultset.next()){
+                while (resultset.next()){
                     badgeid = resultset.getString(1);
                 }
             }
@@ -77,7 +77,7 @@ public class TASDatabase {
         HashMap<String, String> params = new HashMap<>();
 
         try{
-            String query= "SELECT * FROM employee WHERE id = ?";
+            String query= "SELECT * FROM employee WHERE id = ? ";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, id);
 
@@ -87,7 +87,7 @@ public class TASDatabase {
                 
                 ResultSet resultset = pstmt.getResultSet();
 
-                if(resultset.next()) {
+                if (resultset.next()) {
                     params.put("id", String.valueOf(id));
                     params.put("badgeid", resultset.getString("badgeid"));
                     params.put("firstname",resultset.getString("firstname"));
@@ -116,7 +116,7 @@ public class TASDatabase {
         int id_int = 0;
 
         try {
-            String query = "SELECT * FROM employee WHERE badgeid = ?";
+            String query = "SELECT * FROM employee WHERE badgeid = ? ";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, badgeid);
             
@@ -125,7 +125,7 @@ public class TASDatabase {
             if (ptExe) {
                 ResultSet resultset = pstmt.executeQuery();
                 
-                while(resultset.next()){
+                while (resultset.next()){
                     badgeid = resultset.getString(2);
                     id_int = resultset.getInt(1);
                 }
@@ -143,7 +143,7 @@ public class TASDatabase {
         HashMap<String, String> params = new HashMap<>();
         
         try{
-            String query = "SELECT * FROM tas_sp22_v1.event WHERE id =?";
+            String query = "SELECT * FROM tas_sp22_v1.event WHERE id = ? ";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1,id);
          
@@ -153,7 +153,7 @@ public class TASDatabase {
 
                 ResultSet resultset = pstmt.getResultSet();
 
-                while(resultset.next()) {
+                while (resultset.next()) {
                     params.put("id", String.valueOf(id));
                     params.put("terminalid", String.valueOf(resultset.getInt("terminalid")));
                     params.put("eventtypeid",String.valueOf(resultset.getInt("eventtypeid")));
@@ -199,7 +199,7 @@ public class TASDatabase {
         boolean test =(terminalid ==terminalid_employee||terminalid == 0);
         
         
-        if(test){
+        if (test){
             
             try{
             String query = "INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (?,?,?,?);";
@@ -249,7 +249,7 @@ public class TASDatabase {
             if (pstmtExe) {
                 ResultSet resultset = pstmt.getResultSet();
                 
-                if(resultset.next()) {
+                if (resultset.next()) {
 
                     params.put("description", resultset.getString("description"));
                     params.put("id", String.valueOf(resultset.getInt("id")));
@@ -287,7 +287,7 @@ public class TASDatabase {
             if (ptExe) {
                 ResultSet resultset = pstmt.executeQuery();
                 
-                while(resultset.next()){
+                while (resultset.next()){
                     params.put("shiftid", String.valueOf(resultset.getInt("shiftid")));
                 }
             }
@@ -305,7 +305,7 @@ public class TASDatabase {
         HashMap<String, String> params = new HashMap<>();
         
         try{
-            String query= "SELECT * FROM department WHERE id =?";
+            String query= "SELECT * FROM department WHERE id = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1,id);
 
@@ -315,7 +315,7 @@ public class TASDatabase {
 
                 ResultSet resultset = pstmt.getResultSet();
 
-                while(resultset.next()) {
+                while (resultset.next()) {
                     params.put("id", String.valueOf(id));
                     params.put("description", resultset.getString("description"));
                     params.put("terminalid", String.valueOf(resultset.getInt("terminalid")));
@@ -323,7 +323,7 @@ public class TASDatabase {
                 }
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             e.printStackTrace(); 
         }
         
@@ -360,7 +360,7 @@ public class TASDatabase {
                     
                 ResultSet resultset = pstmt.getResultSet();
                 
-                while(resultset.next()) {
+                while (resultset.next()) {
                     params.put("id",(resultset.getInt("id")));
                     int id= params.get("id");
                     DailyPunches.add(getPunch(id));

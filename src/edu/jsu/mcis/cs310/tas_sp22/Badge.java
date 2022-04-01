@@ -7,7 +7,7 @@ public class Badge {
     
     public Badge(String id,String description){
         this.id = id;
-        this.description= description;   
+        this.description = description;   
     }
 
     public String getId() {
