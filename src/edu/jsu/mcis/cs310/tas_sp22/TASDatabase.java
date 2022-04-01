@@ -187,7 +187,7 @@ public class TASDatabase {
          
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS");
         
-        LocalDateTime now = p.getTimestamp();
+        LocalDateTime now = p.getOriginalTimestamp();
         String currenttime = now.format(dtf);
         Timestamp timestamp = Timestamp.valueOf(currenttime);
         

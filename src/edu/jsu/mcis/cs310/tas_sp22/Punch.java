@@ -61,8 +61,9 @@ public class Punch {
         return badge;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public String getTimestamp() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
+        return timestamp.format(dtf).toUpperCase();
     }
 
     public int getEventtypeid() {
@@ -108,15 +109,15 @@ public class Punch {
         int dockpenalty = s.getDockpenalty();
         int lunchthreshold = s.getLunchthreshold();
 
-        LocalTime time = getTimestamp().toLocalTime();
-        adjustmenttype = "(None)";
+        LocalTime time = getOriginalTimestamp().toLocalTime();
+        adjustmenttype = "None";
         int timediff = 0;
         
         DayOfWeek day = timestamp.getDayOfWeek();
         
         if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
             adjustedtime = roundInterval(roundinterval,time);
-            adjustmenttype = "(Interval Round)";
+            adjustmenttype = "Interval Round";
         }
         else {
             
@@ -128,11 +129,11 @@ public class Punch {
                 if (time.isBefore(shiftstart)) { //Before shift start
                     if (timediff <= graceperiod || timediff <= roundinterval) { //Grace Period
                         adjustedtime = shiftstart;
-                        adjustmenttype = "(Shift Start)";
+                        adjustmenttype = "Shift Start";
                     }
                     else { //Round interval
                         adjustedtime = roundInterval(roundinterval,time);
-                        adjustmenttype = "(Interval Round)";
+                        adjustmenttype = "Interval Round";
                     }
                 }
 
@@ -142,21 +143,21 @@ public class Punch {
                     }
                     else if (timediff <= graceperiod) { //Grace Period
                         adjustedtime = shiftstart;
-                        adjustmenttype = "(Shift Start)";
+                        adjustmenttype = "Shift Start";
                     }
                     else if (timediff >= graceperiod && timediff <= dockpenalty) { //Dock Penalty
                         adjustedtime = shiftstart.plusMinutes(dockpenalty);
-                        adjustmenttype = "(Shift Dock)";
+                        adjustmenttype = "Shift Dock";
                     }
                     else if (timediff >= dockpenalty) {
                         adjustedtime = roundInterval(roundinterval,time);
-                        adjustmenttype = "(Interval Round)";
+                        adjustmenttype = "Interval Round";
                     }
                 }
 
                 if (time.isAfter(lunchstart) && time.isBefore(lunchstop)) {
                     adjustedtime = lunchstop;
-                    adjustmenttype = "(Lunch Stop)";
+                    adjustmenttype = "Lunch Stop";
                 }
             }
 
@@ -171,37 +172,37 @@ public class Punch {
                     }
                     else if (timediff <= graceperiod || timediff <= roundinterval) { //Grace Period
                         adjustedtime = shiftstop;
-                        adjustmenttype = "(Shift Stop)";
+                        adjustmenttype = "Shift Stop";
                     }
                     else /*if (timediff > roundinterval)*/ { //Round interval
                         adjustedtime = roundInterval(roundinterval,time);
-                        adjustmenttype = "(Interval Round)";
+                        adjustmenttype = "Interval Round";
                     }
                 }
 
                 else if (time.isAfter(lunchstop) && time.isBefore(shiftstop)) { //After lunch start, but before shift stop
                     if (timediff <= graceperiod) { //Grace Period
                         adjustedtime = shiftstop;
-                        adjustmenttype = "(Shift Stop)";
+                        adjustmenttype = "Shift Stop";
                     }
                     if (timediff >= graceperiod && timediff <= dockpenalty) { //Dock Penalty
                         adjustedtime = shiftstop.minusMinutes(dockpenalty);
-                        adjustmenttype = "(Shift Dock)";
+                        adjustmenttype = "Shift Dock";
                     }
                     else if (timediff >= dockpenalty) {
                         adjustedtime = roundInterval(roundinterval,time);
-                        adjustmenttype = "(Interval Round)";
+                        adjustmenttype = "Interval Round";
                     }
                 }
 
                 else if (time.isAfter(lunchstart) && time.isBefore(lunchstop)) {
                     adjustedtime = lunchstart;
-                    adjustmenttype = "(Lunch Start)";
+                    adjustmenttype = "Lunch Start";
                 }
             }
         }
         
-        adjustedtimestamp = LocalDateTime.of(timestamp.toLocalDate(), adjustedtime);
+        adjustedtimestamp = getAdjustedLocalDateTime();
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
     }
@@ -210,12 +211,18 @@ public class Punch {
         LocalTime adjusted = adjustedtime;
         return adjusted;
     }
+    
+    public LocalDateTime getAdjustedLocalDateTime(){
+        adjustedtimestamp = LocalDateTime.of(timestamp.toLocalDate(), adjustedtime); 
+        return adjustedtimestamp;
+    }
+    
     public String getAdjustmenttype(){
         return adjustmenttype;
     }
 
     public String printOriginal() {
-         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
 
         StringBuilder s = new StringBuilder();
         s.append("#").append(badgeid).append(' ').append(punchtypeid);
@@ -233,7 +240,7 @@ public class Punch {
         StringBuilder s = new StringBuilder();
         s.append("#").append(badgeid).append(' ').append(punchtypeid);
         s.append(": ").append(adjustedtimestamp.format(dtf).toUpperCase());
-        s.append(' ').append(adjustmenttype);     
+        s.append(' ').append("(").append(adjustmenttype).append(")");     
         
         return s.toString();
     }

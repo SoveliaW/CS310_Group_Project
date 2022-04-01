@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.json.simple.*;
 import java.sql.SQLException;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ public class TAS {
     {
         int lunch = 0;
         int min = 0;
-        int lunch_added = 30;
+        int lunch_added = Math.abs((int)MINUTES.between(shift.getLunchstart(), shift.getLunchstop()));
         
         ArrayList <Punch> p1 = dailypunchlist; 
         
@@ -38,7 +39,7 @@ public class TAS {
             LocalTime time_out = p1.get(1).getAdjustedTimestamp();
             
             min = Math.abs((int)MINUTES.between(time_in,time_out));
-            if (min >360 ){
+            if (min > shift.getLunchthreshold() ){ 
                 min = min - lunch_added;
             }
                 
@@ -59,36 +60,31 @@ public class TAS {
     }
     
     public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist){
-         ArrayList <String>jsonData  = new ArrayList<>();
-         HashMap<String, String> PunchData = new HashMap<>();
-
          
-         for(Punch punch :dailypunchlist){
-       
-           PunchData.put("badgeid:", String.valueOf(punch.getBadge()));
-           PunchData.put("terminalid:", String.valueOf(punch.getTerminalid()));
-           PunchData.put("punchtypeid:", String.valueOf(punch.getPunchtypeid()));
-           PunchData.put("id:", String.valueOf(punch.getId()));
-           PunchData.put("adjustmenttype:", String.valueOf(punch.getAdjustmenttype()));
-           PunchData.put("originaltimestamp:", String.valueOf(punch.getOriginalTimestamp()));
-           
-            //have some error when getting the original timestamp
-           //System.err.println(punch.getOriginalTimestamp());
-           
-           
-           PunchData.put("adjustedtimestamp:", String.valueOf(punch.getAdjustedTimestamp()));
-           //System.err.println(punch.getAdjustedTimestamp());
-           //System.err.println("This is the original timestamp: "+ punch.getOriginalTimestamp());
-           
-           jsonData.add("originaltimestamp"+":"+PunchData.get("originaltimestamp:"));
-           jsonData.add("badgeid"+":"+PunchData.get("badgeid:"));
-           jsonData.add("adjustedtimestamp"+":"+PunchData.get("adjustedtimestamp:"));
-           jsonData.add("adjustmenttype"+":"+PunchData.get("adjustmenttype:"));
-           jsonData.add("terminalid"+":"+PunchData.get("terminalid:"));
-           jsonData.add("id"+":"+PunchData.get("id: "));
+        String results = "";
+        
+        ArrayList <HashMap<String, String>> jsonData = new ArrayList<>();
+ 
+        for(Punch punch :dailypunchlist){
+         
+            HashMap<String, String> punchData = new HashMap<>();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
+            
+            punchData.put("originaltimestamp", punch.getTimestamp().toUpperCase());
+            punchData.put("badgeid", String.valueOf(punch.getBadge().getId()));
+            punchData.put("adjustedtimestamp", punch.getAdjustedLocalDateTime().format(dtf).toUpperCase());        
+            punchData.put("adjustmenttype", String.valueOf(punch.getAdjustmenttype()));
+            punchData.put("terminalid", String.valueOf(punch.getTerminalid()));
+            punchData.put("punchtype", String.valueOf(punch.getPunchtypeid()));
+            punchData.put("id", String.valueOf(punch.getId()));
+            
+            jsonData.add(punchData);
 
-           
-         }
+            //have some error when getting the original timestamp
+            System.err.println("Orginal: " + punch.getOriginalTimestamp());
+            System.err.println("Timestamp: " + punch.getTimestamp());
+   
+        }
          
          //System.err.println("This is the original timestamp: "+ punch.getOriginalTimestamp());
          String json = JSONValue.toJSONString(jsonData);
