@@ -47,7 +47,7 @@ public class Test5 {
 		
         /* Get Punch */
         
-        Punch p = db.getPunch(272);
+        Punch p = db.getPunch(1012);
         Badge b = p.getBadge();
         Shift s = db.getShift(b);
         
