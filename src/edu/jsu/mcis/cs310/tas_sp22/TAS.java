@@ -91,4 +91,12 @@ public class TAS {
          System.err.println("This is the JasonData: "+json);
          return json;
     } 
+    
+    public static Double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s){
+        //Use the getPayPeriodPunchList() 
+        /* This method should get the toal minutes accured by the empolyee,
+        get the total number of mins they were scheduled to work (use Punch arraylist and shift object.
+        We will use the above to calculate the absenteeism percentage
+        */
+    }
 }

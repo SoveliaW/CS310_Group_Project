@@ -376,6 +376,26 @@ public class TASDatabase {
         return DailyPunches;
     }
     
+    public Punch getPayPeriodPunchList(Badge badge, LocalDate payperiod){
+        //Returns a list of punches from a single day
+        //could use getPunch() to get orginial punches
+    }
+    
+    public Punch getDailyPunchList(Badge badge, LocalDate payperiod){
+        //Returns a list of punches for the whole payperiod
+        //could use getPunch() to get orginial punches
+    }
+    
+    public Absenteeism getAbsenteeism(String badgeid, LocalDate payperiod){
+        //Returns the corresponding absenteesim record form the datebase
+    }   
+    
+    public Absenteeism insertAbsenteeism(Absenteeism absenteeism){
+        /* Adds a new record into the datebase if none exsist for that badgeid and payperiod
+        if a record already excit, it shoukd be replace, to refelct the new absenteeism percentd
+        the payperiod date will always be the start of the payperiod (Sunday) */
+    }
+    
     public boolean isConnected() {
         boolean result = false;
         
