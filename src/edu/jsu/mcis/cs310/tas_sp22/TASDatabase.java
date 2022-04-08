@@ -392,10 +392,7 @@ public class TASDatabase {
             }
         }  
         
-        for (int i = 0 ; dailyPunches.size()>i; i++){
-            System.out.println((dailyPunches.iterator().toString()));
-        }
-        
+       
        
         
         return dailyPunches;
@@ -406,8 +403,35 @@ public class TASDatabase {
         //could use getPunch() to get orginial punches
     }
     */
-    public Absenteeism getAbsenteeism(String badgeid, LocalDate payperiod){
-        //Returns the corresponding absenteesim record form the datebase
+    public Absenteeism getAbsenteeism(Badge badge, LocalDate payperiod){
+        String badgeid = null;
+        Double percentage = null;
+        
+        try {
+            String query = "Select *FROM Absenteeism WHERE id = ? ;";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, badgeid);
+            
+            boolean ptExe = pstmt.execute();
+            
+            if (ptExe) {
+                ResultSet resultset = pstmt.getResultSet();
+                
+                while (resultset.next()){
+                    badgeid = resultset.getString(1);
+                    payperiod = resultset.getDate(2).toLocalDate();
+                    percentage = resultset.getDouble(3);
+                }
+            }
+        }
+        catch (Exception e) { 
+            e.printStackTrace();
+        }
+        
+        badge = getBadge(badgeid);
+        Absenteeism result = new Absenteeism(badge, payperiod, percentage);
+        
+        return result;
     }   
     
     public int insertAbsenteeism(Absenteeism absenteeism){
@@ -416,10 +440,10 @@ public class TASDatabase {
         if a record already excit, it shoukd be replace, to refelct the new absenteeism percentd
         the payperiod date will always be the start of the payperiod (Sunday) */
         
-         String badgeid = absenteeism.getBadgeid();
-         LocalDate pay_date = absenteeism.getPayperiod();
-         Date payperiod = Date.valueOf(pay_date);
-         double percentage = absenteeism.getPercentage();
+        String badgeid = absenteeism.getBadge().getId();
+        LocalDate pay_date = absenteeism.getPayperiod();
+        Date payperiod = Date.valueOf(pay_date);
+        double percentage = absenteeism.getPercentage();
          
         try{
             

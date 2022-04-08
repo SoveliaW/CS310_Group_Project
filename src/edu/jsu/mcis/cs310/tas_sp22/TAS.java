@@ -93,6 +93,8 @@ public class TAS {
     } 
     
     public static Double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s){
+        double i = 0;
+        return i;
         //Use the getPayPeriodPunchList() 
         /* This method should get the toal minutes accured by the empolyee,
         get the total number of mins they were scheduled to work (use Punch arraylist and shift object.
