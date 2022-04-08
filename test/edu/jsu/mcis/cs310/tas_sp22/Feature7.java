@@ -26,9 +26,11 @@ public class Feature7 {
         Shift s = db.getShift(b);
         
         /* Get Pay Period Punch List */
-        
+         //System.err.println("This is the badge printed" + b);
         LocalDateTime ts = p.getOriginalTimestamp();
         ArrayList<Punch> punchlist = db.getPayPeriodPunchList(b, ts.toLocalDate(), s);
+        
+     
         
         /* Compute Pay Period Total Absenteeism */
         

@@ -376,25 +376,64 @@ public class TASDatabase {
         return DailyPunches;
     }
     
-    public Punch getPayPeriodPunchList(Badge badge, LocalDate payperiod){
-        //Returns a list of punches from a single day
+    public ArrayList<Punch> getPayPeriodPunchList(Badge badge, LocalDate payperiod, Shift s){
+        //Returns a list of punches from the payperoid day
         //could use getPunch() to get orginial punches
+        ArrayList<ArrayList<Punch>> DailyPunches = new ArrayList<>();
+        
+        //System.err.println( "This is the beginging date: "+ payperiod +" This is the ending date: "+payperiod_enddate );
+        
+        for (int i =0; i < 7;i++){
+            LocalDate payperiod_day = payperiod.plusDays(i);
+            ArrayList<Punch> dailyPunchList =  getDailyPunchList(badge, payperiod_day);
+            DailyPunches.add(dailyPunchList);
+            //This should add 1 weeks worth of punches from an individual to DailyPunches List
+        }
+        for(int i = 0 ; DailyPunches.size()>i; i++)
+        {
+            System.out.println((DailyPunches.iterator()));
+        }
+        
+       
+        
+        return DailyPunches;
     }
     
-    public Punch getDailyPunchList(Badge badge, LocalDate payperiod){
+   /* public Punch getDailyPunchList(Badge badge, LocalDate payperiod){
         //Returns a list of punches for the whole payperiod
         //could use getPunch() to get orginial punches
     }
-    
+    */
     public Absenteeism getAbsenteeism(String badgeid, LocalDate payperiod){
         //Returns the corresponding absenteesim record form the datebase
     }   
     
-    public Absenteeism insertAbsenteeism(Absenteeism absenteeism){
+    public int insertAbsenteeism(Absenteeism absenteeism){
+        int D =0;
         /* Adds a new record into the datebase if none exsist for that badgeid and payperiod
         if a record already excit, it shoukd be replace, to refelct the new absenteeism percentd
         the payperiod date will always be the start of the payperiod (Sunday) */
+        
+         String badgeid = absenteeism.getBadgeid();
+         LocalDate pay_date = absenteeism.getPayperiod();
+         Date payperiod = Date.valueOf(pay_date);
+         double percentage = absenteeism.getPercentage();
+         
+        try{
+            
+            String query = "INSERT INTO absenteeism (badgeid, payperiod, percentage) VALUES (?,?,?);";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setString(1,badgeid);
+            pstmt.setDate(2,payperiod);
+            pstmt.setDouble(3,percentage);
+         
+        }
+        catch (Exception e) {
+            e.printStackTrace(); 
+        }
+       return D; 
     }
+    
     
     public boolean isConnected() {
         boolean result = false;

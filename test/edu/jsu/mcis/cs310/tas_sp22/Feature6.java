@@ -86,7 +86,7 @@ public class Feature6 {
 		
         /* Compare to Expected JSON */
         
-        assertEquals(expected, actual);
+       assertEquals(expected, actual);
         
     }
     
