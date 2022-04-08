@@ -379,24 +379,26 @@ public class TASDatabase {
     public ArrayList<Punch> getPayPeriodPunchList(Badge badge, LocalDate payperiod, Shift s){
         //Returns a list of punches from the payperoid day
         //could use getPunch() to get orginial punches
-        ArrayList<ArrayList<Punch>> DailyPunches = new ArrayList<>();
+        ArrayList<Punch> dailyPunches = new ArrayList<>();
         
         //System.err.println( "This is the beginging date: "+ payperiod +" This is the ending date: "+payperiod_enddate );
         
-        for (int i =0; i < 7;i++){
+        for (int i = 0; i < 7; i++) {
             LocalDate payperiod_day = payperiod.plusDays(i);
             ArrayList<Punch> dailyPunchList =  getDailyPunchList(badge, payperiod_day);
-            DailyPunches.add(dailyPunchList);
-            //This should add 1 weeks worth of punches from an individual to DailyPunches List
-        }
-        for(int i = 0 ; DailyPunches.size()>i; i++)
-        {
-            System.out.println((DailyPunches.iterator()));
+            for (Punch punch : dailyPunchList){
+                dailyPunches.add(punch);
+                //This should add 1 weeks worth of punches from an individual to DailyPunches List
+            }
+        }  
+        
+        for (int i = 0 ; dailyPunches.size()>i; i++){
+            System.out.println((dailyPunches.iterator().toString()));
         }
         
        
         
-        return DailyPunches;
+        return dailyPunches;
     }
     
    /* public Punch getDailyPunchList(Badge badge, LocalDate payperiod){
