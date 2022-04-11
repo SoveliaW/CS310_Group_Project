@@ -196,7 +196,7 @@ public class TASDatabase {
         int departmentid = employee.getDeptid();
         int terminalid_employee = (getDepartment(departmentid)).getTerminalid();
        
-        boolean test =(terminalid ==terminalid_employee||terminalid == 0);
+        boolean test =(terminalid == terminalid_employee||terminalid == 0);
         
         
         if (test){
@@ -390,27 +390,22 @@ public class TASDatabase {
                 dailyPunches.add(punch);
                 //This should add 1 weeks worth of punches from an individual to DailyPunches List
             }
-        }  
-        
-       
-       
+        }
         
         return dailyPunches;
     }
     
-   /* public Punch getDailyPunchList(Badge badge, LocalDate payperiod){
-        //Returns a list of punches for the whole payperiod
-        //could use getPunch() to get orginial punches
-    }
-    */
+
     public Absenteeism getAbsenteeism(Badge badge, LocalDate payperiod){
         String badgeid = null;
-        Double percentage = null;
+        double percentage = 0;
+        Date payperiod_date = Date.valueOf(payperiod);
         
         try {
-            String query = "Select *FROM Absenteeism WHERE id = ? ;";
+            String query = "Select *FROM Absenteeism WHERE id = ? AND payperiod = ?;";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, badgeid);
+            pstmt.setDate(3, payperiod_date);
             
             boolean ptExe = pstmt.execute();
             
@@ -434,30 +429,45 @@ public class TASDatabase {
         return result;
     }   
     
-    public int insertAbsenteeism(Absenteeism absenteeism){
-        int D =0;
-        /* Adds a new record into the datebase if none exsist for that badgeid and payperiod
-        if a record already excit, it shoukd be replace, to refelct the new absenteeism percentd
-        the payperiod date will always be the start of the payperiod (Sunday) */
+    public int insertAbsenteeism(Absenteeism a){
+        int result = 0;
+        int key = 0;
+        ResultSet keys;
         
-        String badgeid = absenteeism.getBadge().getId();
-        LocalDate pay_date = absenteeism.getPayperiod();
-        Date payperiod = Date.valueOf(pay_date);
-        double percentage = absenteeism.getPercentage();
-         
+        String badgeid = a.getBadge().getId();
+        double percentage = a.getPercentage();
+        
+        
+        LocalDate payperiod_ld = a.getPayperiod();
+        String payperiod_s = String.valueOf(payperiod_ld);
+        Date payperiod = Date.valueOf(payperiod_s);
+        
         try{
-            
             String query = "INSERT INTO absenteeism (badgeid, payperiod, percentage) VALUES (?,?,?);";
-            PreparedStatement pstmt = connection.prepareStatement(query);
+           
+            PreparedStatement pstmt = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+           
             pstmt.setString(1,badgeid);
             pstmt.setDate(2,payperiod);
             pstmt.setDouble(3,percentage);
-         
-        }
-        catch (Exception e) {
-            e.printStackTrace(); 
-        }
-       return D; 
+           
+            result = pstmt.executeUpdate();
+            
+                if (result == 1) {
+                    keys = pstmt.getGeneratedKeys();
+                    
+                    if (keys.next()) { 
+                        key = keys.getInt(1); 
+                    }
+                }
+            }  
+            catch (Exception e){
+                e.printStackTrace(); 
+            }
+        
+        System.err.println(key +" this is the key returned by test 3");
+        
+        return key;
     }
     
     

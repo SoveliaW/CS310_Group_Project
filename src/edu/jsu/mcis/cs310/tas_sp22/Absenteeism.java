@@ -7,10 +7,10 @@ import java.time.format.DateTimeFormatter;
 public class Absenteeism {
     private Badge badge;
     private LocalDate payperiod;
-    private Double percentage;
+    private double percentage;
     
-    public Absenteeism (Badge badge, LocalDate payperiod, Double percentage){
-        this.badge = this.badge;
+    public Absenteeism (Badge badge, LocalDate payperiod, double percentage){
+        this.badge = badge;
         this.payperiod = payperiod;
         this.percentage = percentage;
     }
@@ -31,11 +31,11 @@ public class Absenteeism {
         this.payperiod = payperiod;
     }
 
-    public Double getPercentage() {
+    public double getPercentage() {
         return percentage;
     }
 
-    public void setPercentage(Double percentage) {
+    public void setPercentage(double percentage) {
         this.percentage = percentage;
     }
 
@@ -46,7 +46,7 @@ public class Absenteeism {
         // #28DC3FB8 (Pay Period Starting 09-02-2018): 2.50%
         StringBuilder s = new StringBuilder();
         
-        s.append("#").append(badge).append("(Pay Period Starting ").append(payperiod.format(dtf)).append("): percentage"); 
+        s.append("#").append(badge.getId()).append("(Pay Period Starting ").append(payperiod.format(dtf)).append("): ").append(percentage); 
         
         return s.toString();
     }
