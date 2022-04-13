@@ -335,19 +335,19 @@ public class TASDatabase {
     } 
     
     public ArrayList<Punch> getDailyPunchList(Badge badge, LocalDate date) {
-       ArrayList<Punch> DailyPunches = new ArrayList<>();
-       DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-       Badge name = badge;
-       String badgeid =name.getId();
-       
-       
-      HashMap<String,Integer> params = new HashMap<>();
-       Date localdate = Date.valueOf(date);
-       
-       
-       int result = 0;
-       
-       try{
+        ArrayList<Punch> DailyPunches = new ArrayList<>();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Badge name = badge;
+        String badgeid =name.getId();
+
+
+        HashMap<String,Integer> params = new HashMap<>();
+        Date localdate = Date.valueOf(date);
+
+
+        int result = 0;
+
+        try{
             String query= "SELECT *, DATE(`timestamp`) AS tsdate FROM tas_sp22_v1.event WHERE badgeid=? HAVING tsdate=? ORDER BY `timestamp`";
            
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -379,26 +379,23 @@ public class TASDatabase {
     }
     
     public ArrayList<Punch> getPayPeriodPunchList(Badge badge, LocalDate payperiod, Shift s){
-        //Returns a list of punches from the payperoid day
-        //could use getPunch() to get orginial punches
-        ArrayList<Punch> dailyPunches = new ArrayList<>();
+
+        ArrayList<Punch> payPunches = new ArrayList<>();
         TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
        
         Date payweek = java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY));
         LocalDate pay_week = payweek.toLocalDate();
         System.err.println("Print the day: " + pay_week);
-        //System.err.println( "This is the beginging date: "+ payperiod +" This is the ending date: "+payperiod_enddate );
         
         for (int i = 0; i < 7; i++) {
             LocalDate payperiod_day = pay_week.plusDays(i);
             ArrayList<Punch> dailyPunchList =  getDailyPunchList(badge, payperiod_day);
             for (Punch punch : dailyPunchList){
-                dailyPunches.add(punch);
-                //This should add 1 weeks worth of punches from an individual to DailyPunches List
+                payPunches.add(punch);
             }
         }
         
-        return dailyPunches;
+        return payPunches;
     }
     
 

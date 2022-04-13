@@ -57,7 +57,7 @@ public class Absenteeism {
         // #28DC3FB8 (Pay Period Starting 09-02-2018): 2.50%
         StringBuilder s = new StringBuilder();
         
-        s.append("#").append(badge.getId()).append("(Pay Period Starting ").append(pay_period.format(dtf)).append("): ").append(percentage); 
+        s.append("#").append(badge.getId()).append(" (Pay Period Starting ").append(pay_period.format(dtf)).append("): ").append(percentage); 
         
         return s.toString();
     }
