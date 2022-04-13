@@ -383,8 +383,9 @@ public class TASDatabase {
         
         Calendar cal = Calendar.getInstance();
         cal.setFirstDayOfWeek(Calendar.SUNDAY);
-        int rec = cal.compareTo(payperiod.get(field));
-        System.err.println("This is the diffrence:" + rec);
+        int rec = cal.compareTo(cal);
+        System.err.println("This it the starting day: " + rec);
+        
         
         //System.err.println( "This is the beginging date: "+ payperiod +" This is the ending date: "+payperiod_enddate );
         
@@ -406,7 +407,6 @@ public class TASDatabase {
         double percentage = 0;
         Date payperiod_date = Date.valueOf(payperiod);
        LocalDate payperiod_day = payperiod.
-               
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy ");
         System.out.println("This is the payperiod date: " + payperiod.format(dtf));
         
