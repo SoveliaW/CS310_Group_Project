@@ -1,9 +1,8 @@
 package edu.jsu.mcis.cs310.tas_sp22;
 import java.util.HashMap;
-import java.time.LocalDate;
-
 
 public class Department {
+    
     private String description;
     private int id, terminalid;
     

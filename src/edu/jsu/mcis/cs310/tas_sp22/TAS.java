@@ -65,7 +65,7 @@ public class TAS {
         
         ArrayList <HashMap<String, String>> jsonData = new ArrayList<>();
  
-        for(Punch punch :dailypunchlist){
+        for(Punch punch : dailypunchlist){
          
             HashMap<String, String> punchData = new HashMap<>();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
@@ -79,17 +79,10 @@ public class TAS {
             punchData.put("id", String.valueOf(punch.getId()));
             
             jsonData.add(punchData);
-
-            //have some error when getting the original timestamp
-            System.err.println("Orginal: " + punch.getOriginalTimestamp());
-            System.err.println("Timestamp: " + punch.getTimestamp());
-   
         }
-         
-         //System.err.println("This is the original timestamp: "+ punch.getOriginalTimestamp());
-         String json = JSONValue.toJSONString(jsonData);
-         System.err.println("This is the JasonData: "+json);
-         return json;
+        String json = JSONValue.toJSONString(jsonData);
+        
+        return json;
     } 
     
     public static Double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s){

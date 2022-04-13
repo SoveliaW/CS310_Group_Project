@@ -1,6 +1,5 @@
 package edu.jsu.mcis.cs310.tas_sp22;
 
-
 import java.time.LocalDateTime;
 import java.sql.*;
 import java.time.DayOfWeek;
@@ -8,7 +7,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.time.temporal.ChronoField;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 public class Punch {
@@ -19,7 +17,7 @@ public class Punch {
     private LocalDateTime timestamp, adjustedtimestamp;
     private Badge badge;
     private ArrayList DailyPunchList;
-    private LocalTime time, adjustedtime;
+    private LocalTime adjustedtime;
 
 
     public Punch(HashMap<String, String> params, Badge badge) {
@@ -31,9 +29,6 @@ public class Punch {
         this.punchtypeid = PunchType.values()[Integer.parseInt(params.get("eventtypeid"))];
         this.badge = badge;
 
-        this.time = timestamp.toLocalTime();
-        
-        
         String dayofweek = timestamp.getDayOfWeek().toString();
 
     }
@@ -51,10 +46,6 @@ public class Punch {
 
     public int getId() {
         return id;
-    }
-
-    public LocalTime getLocaltime() {
-        return time;
     }
 
     public Badge getBadge() {
@@ -91,7 +82,7 @@ public class Punch {
         int minutes = time.getMinute();
         int remainder = minutes % roundinterval;
 
-        if (remainder < (roundinterval/2)) {
+        if (remainder < (roundinterval / 2)) {
             return adjustedtime = time.minusMinutes(remainder).withSecond(0).withNano(0);
         } 
         else {
@@ -107,8 +98,7 @@ public class Punch {
         int roundinterval = s.getRoundinterval();
         int graceperiod = s.getGraceperiod();
         int dockpenalty = s.getDockpenalty();
-        int lunchthreshold = s.getLunchthreshold();
-
+        
         LocalTime time = getOriginalTimestamp().toLocalTime();
         adjustmenttype = "None";
         int timediff = 0;
@@ -204,7 +194,6 @@ public class Punch {
         
         adjustedtimestamp = getAdjustedLocalDateTime();
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
     }
     
     public LocalTime getAdjustedTimestamp(){

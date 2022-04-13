@@ -1,7 +1,7 @@
 package edu.jsu.mcis.cs310.tas_sp22;
+
 import java.sql.*;
 import java.sql.Connection;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.*;
 import java.sql.Date;
-import java.time.LocalTime;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+
 public class TASDatabase {
     
     private final Connection connection;
@@ -17,8 +19,7 @@ public class TASDatabase {
     public TASDatabase(String username, String password, String address) {
         this.connection = openConnection(username, password, address);
     }
-    String results =null;
-    
+   
     public Badge getBadge(String badgeid) {
         String id = null, des = null;
      
@@ -386,6 +387,9 @@ public class TASDatabase {
         int rec = cal.compareTo(cal);
         System.err.println("This it the starting day: " + rec);
         
+        int day_given = payperiod.;
+        System.err.println("This is the day given: " + day_given);
+        
         
         //System.err.println( "This is the beginging date: "+ payperiod +" This is the ending date: "+payperiod_enddate );
         
@@ -403,19 +407,16 @@ public class TASDatabase {
     
 
     public Absenteeism getAbsenteeism(Badge badge, LocalDate payperiod){
-        String badgeid = badge.getId();;
+        String badgeid = badge.getId();
         double percentage = 0;
-        Date payperiod_date = Date.valueOf(payperiod);
-       LocalDate payperiod_day = payperiod.
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy ");
-        System.out.println("This is the payperiod date: " + payperiod.format(dtf));
-        
+        TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
+       
         
         try {
-            String query = "Select *FROM Absenteeism WHERE id = ? AND payperiod = ?;";
+            String query = "Select * FROM Absenteeism WHERE id = ? AND payperiod = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, badgeid);
-            pstmt.setDate(3, payperiod_date);
+            pstmt.setDate(3, java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY)));
             
             boolean ptExe = pstmt.execute();
             
@@ -423,9 +424,9 @@ public class TASDatabase {
                 ResultSet resultset = pstmt.getResultSet();
                 
                 while (resultset.next()){
-                    badgeid = resultset.getString(1);
-                    payperiod = resultset.getDate(2).toLocalDate();
-                    percentage = resultset.getDouble(3);
+                    badgeid = resultset.getString("badgeid");
+                    payperiod = resultset.getDate("payperiod").toLocalDate();
+                    percentage = resultset.getDouble("percentage");
                 }
             }
         }
@@ -453,13 +454,13 @@ public class TASDatabase {
         Date payperiod = Date.valueOf(payperiod_s);
         
         try{
-            String query = "INSERT INTO absenteeism (badgeid, payperiod, percentage) VALUES (?,?,?);";
+            String query = "INSERT INTO absenteeism (badgeid, payperiod, percentage) VALUES (?, ?, ?)";
            
-            PreparedStatement pstmt = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
            
-            pstmt.setString(1,badgeid);
-            pstmt.setDate(2,payperiod);
-            pstmt.setDouble(3,percentage);
+            pstmt.setString(1, badgeid);
+            pstmt.setDate(2, payperiod);
+            pstmt.setDouble(3, percentage);
            
             result = pstmt.executeUpdate();
             
@@ -474,8 +475,6 @@ public class TASDatabase {
             catch (Exception e){
                 e.printStackTrace(); 
             }
-        
-        System.err.println(key +" this is the key returned by test 3");
         
         return key;
     }

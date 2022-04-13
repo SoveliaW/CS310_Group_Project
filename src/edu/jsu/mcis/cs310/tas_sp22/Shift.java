@@ -1,18 +1,14 @@
 package edu.jsu.mcis.cs310.tas_sp22;
-import java.sql.*;
-import java.sql.Connection;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 
+import java.time.LocalTime;
+import java.util.HashMap;
 
 public class Shift {
     
     private String description;
     private int roundinterval, graceperiod, dockpenalty, lunchthreshold, id;
-    private LocalTime shiftstart, shiftstop,lunchstart, lunchstop;
-    private long shiftmin,lunchmin;
+    private LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
+    private long shiftmin, lunchmin;
        
    public Shift(HashMap <String, String> params){
       

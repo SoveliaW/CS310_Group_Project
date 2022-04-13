@@ -1,12 +1,12 @@
 package edu.jsu.mcis.cs310.tas_sp22;
-import java.sql.Timestamp;
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Employee {
-    private String badgeid,firstname,middlename,lastname,inactive;
-    private int employeetypeid,deptid,shiftid,id;
+    
+    private String badgeid, firstname, middlename, lastname, inactive;
+    private int employeetypeid, deptid, shiftid, id;
     private LocalDate active;
     
     public Employee(HashMap <String, String> params){
@@ -20,7 +20,7 @@ public class Employee {
         this.deptid = Integer.parseInt(params.get("departmentid"));
         this.shiftid = Integer.parseInt(params.get("shiftid"));
         this.active = LocalDate.parse(params.get("active"));
-        this.inactive ="none";
+        this.inactive = "none";
     }
 
     public String getBadgeid() {
@@ -55,7 +55,5 @@ public class Employee {
         
         return s.toString();
     }
-    
-    
-      
+     
 }

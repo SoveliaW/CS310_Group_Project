@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 
 public class Absenteeism {
+    
     private Badge badge;
     private LocalDate payperiod;
     private double percentage;
