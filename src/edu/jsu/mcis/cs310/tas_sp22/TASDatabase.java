@@ -381,6 +381,11 @@ public class TASDatabase {
         //could use getPunch() to get orginial punches
         ArrayList<Punch> dailyPunches = new ArrayList<>();
         
+        Calendar cal = Calendar.getInstance();
+        cal.setFirstDayOfWeek(Calendar.SUNDAY);
+        int rec = cal.compareTo(payperiod.get(field));
+        System.err.println("This is the diffrence:" + rec);
+        
         //System.err.println( "This is the beginging date: "+ payperiod +" This is the ending date: "+payperiod_enddate );
         
         for (int i = 0; i < 7; i++) {
@@ -397,9 +402,14 @@ public class TASDatabase {
     
 
     public Absenteeism getAbsenteeism(Badge badge, LocalDate payperiod){
-        String badgeid = null;
+        String badgeid = badge.getId();;
         double percentage = 0;
         Date payperiod_date = Date.valueOf(payperiod);
+       LocalDate payperiod_day = payperiod.
+               
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy ");
+        System.out.println("This is the payperiod date: " + payperiod.format(dtf));
+        
         
         try {
             String query = "Select *FROM Absenteeism WHERE id = ? AND payperiod = ?;";
