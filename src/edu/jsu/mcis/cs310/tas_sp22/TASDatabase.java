@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.*;
 import java.sql.Date;
+import java.time.temporal.Temporal;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 
@@ -381,20 +382,15 @@ public class TASDatabase {
         //Returns a list of punches from the payperoid day
         //could use getPunch() to get orginial punches
         ArrayList<Punch> dailyPunches = new ArrayList<>();
-        
-        Calendar cal = Calendar.getInstance();
-        cal.setFirstDayOfWeek(Calendar.SUNDAY);
-        int rec = cal.compareTo(cal);
-        System.err.println("This it the starting day: " + rec);
-        
-        int day_given = payperiod.;
-        System.err.println("This is the day given: " + day_given);
-        
-        
+        TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
+       
+        Date payweek = java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY));
+        LocalDate pay_week = payweek.toLocalDate();
+        System.err.println("Print the day: " + pay_week);
         //System.err.println( "This is the beginging date: "+ payperiod +" This is the ending date: "+payperiod_enddate );
         
         for (int i = 0; i < 7; i++) {
-            LocalDate payperiod_day = payperiod.plusDays(i);
+            LocalDate payperiod_day = pay_week.plusDays(i);
             ArrayList<Punch> dailyPunchList =  getDailyPunchList(badge, payperiod_day);
             for (Punch punch : dailyPunchList){
                 dailyPunches.add(punch);
@@ -411,13 +407,13 @@ public class TASDatabase {
         double percentage = 0;
         TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
        
-        
+         System.out.println("Day of the week we are getting"+ java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY)));
         try {
             String query = "Select * FROM Absenteeism WHERE id = ? AND payperiod = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, badgeid);
             pstmt.setDate(3, java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY)));
-            
+            System.out.println("Day of the week we are getting"+ java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY)));
             boolean ptExe = pstmt.execute();
             
             if (ptExe) {
