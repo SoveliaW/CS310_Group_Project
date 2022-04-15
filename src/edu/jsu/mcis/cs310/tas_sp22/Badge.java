@@ -8,7 +8,7 @@ public class Badge {
         this.id = id;
         this.description = description;   
     }
-
+            
     public String getId() {
         return id;
     }
