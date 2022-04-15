@@ -61,12 +61,12 @@ public class TAS {
         return min;
     }
     
-    public static int calculatePayPeriodTotalMinutes(Badge bagde, Shift shift, LocalDate payperiod) {
+    public  int calculatePayPeriodTotalMinutes(Badge badge, Shift shift, LocalDate payperiod) {
         int lunch = 0;
         int total = 0;
         int days_mins = 0;
         int min = 0;
-        Badge badge = badge;
+        
         
         int lunch_added = Math.abs((int)MINUTES.between(shift.getLunchstart(), shift.getLunchstop()));
         
@@ -78,7 +78,7 @@ public class TAS {
        
         for (int i = 0; i < 7; i++  ){
             LocalDate payday = pay_day.plusDays(i);
-            ArrayList<Punch> dailypunchlist = getDailyPunchList(badge, payday) ;
+            ArrayList<Punch> dailypunchlist = db.getDailyPunchList(badge, payday) ;
             ArrayList <Punch> p1 =dailypunchlist;
             
             if (dailypunchlist.size() >= 2){
@@ -98,16 +98,17 @@ public class TAS {
 
                     lunch = Math.abs((int)MINUTES.between(time_in_lunch,time_outforday));
                 }
-            }
+            
+                 else{
+                 min = 0;
+                }
             total = days_mins;
             days_mins = min + lunch;
             days_mins = total + days_mins;
-        }
-        else{
-            min = 0;
+        
         }
         
-       
+        }
         return min;
     }
     
@@ -139,7 +140,8 @@ public class TAS {
     
     public static Double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s){
         double result = 0;
-
+        Punch punch = punchlist.get(1);
+        System.err.println("This is this first thing in punchlist: "+punch);
         return result;
     }
 
