@@ -6,7 +6,8 @@ import java.util.HashMap;
 public class Shift {
     
     private String description;
-    private int roundinterval, graceperiod, dockpenalty, lunchthreshold, id;
+    private int roundinterval, graceperiod, dockpenalty, lunchthreshold, id, 
+            TotalScheduledHours, LunchDuration;
     private LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
     private long shiftmin, lunchmin;
        
@@ -27,8 +28,16 @@ public class Shift {
         this.shiftmin = java.time.Duration.between(shiftstart,shiftstop).toMinutes();
         
         this.lunchmin = java.time.Duration.between(lunchstart,lunchstop).toMinutes();
-        
+        TotalScheduledHours = 40;
+        LunchDuration = lunchstop.getMinute() - lunchstart.getMinute();
+    }
 
+    public int getLunchDuration() {
+        return LunchDuration;
+    }
+
+    public int getTotalScheduledHours() {
+        return TotalScheduledHours;
     }
 
     public String getDescription() {
