@@ -334,7 +334,7 @@ public class TASDatabase {
         return Results;
     } 
     
-    public ArrayList<Punch> getDailyPunchList(Badge badge, LocalDate date) {
+    public  ArrayList<Punch> getDailyPunchList(Badge badge, LocalDate date) {
         ArrayList<Punch> DailyPunches = new ArrayList<>();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Badge name = badge;

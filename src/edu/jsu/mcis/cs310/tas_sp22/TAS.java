@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.json.simple.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import static java.time.temporal.ChronoUnit.MINUTES;
@@ -61,7 +62,7 @@ public class TAS {
         return min;
     }
     
-    public  int calculatePayPeriodTotalMinutes(Badge badge, Shift shift, LocalDate payperiod) {
+    public  static int calculatePayPeriodTotalMinutes(ArrayList<Punch> punchlist, Shift shift) {
         int lunch = 0;
         int total = 0;
         int days_mins = 0;
@@ -71,17 +72,12 @@ public class TAS {
         int lunch_added = Math.abs((int)MINUTES.between(shift.getLunchstart(), shift.getLunchstop()));
         
        // so for every date I need to get a new punchlist 
-       TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
-       Date payweek = java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY));
-       LocalDate pay_day = payweek.toLocalDate();
-        
+     
        
-        for (int i = 0; i < 7; i++  ){
-            LocalDate payday = pay_day.plusDays(i);
-            ArrayList<Punch> dailypunchlist = db.getDailyPunchList(badge, payday) ;
-            ArrayList <Punch> p1 =dailypunchlist;
             
-            if (dailypunchlist.size() >= 2){
+            ArrayList <Punch> p1 =punchlist;
+            
+            if (punchlist.size() >= 2){
                 LocalTime time_in = p1.get(0).getAdjustedTimestamp();
 
                 LocalTime time_out = p1.get(1).getAdjustedTimestamp();
@@ -91,7 +87,7 @@ public class TAS {
                     min = min - lunch_added;
                 }
 
-                if (dailypunchlist.size() > 2){
+                if (punchlist.size() > 2){
                     LocalTime time_in_lunch = p1.get(2).getAdjustedTimestamp();
 
                     LocalTime time_outforday = p1.get(3).getAdjustedTimestamp();
@@ -108,7 +104,6 @@ public class TAS {
         
         }
         
-        }
         return min;
     }
     
@@ -138,11 +133,72 @@ public class TAS {
         return json;
     } 
     
-    public static Double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s){
-        double result = 0;
-        Punch punch = punchlist.get(1);
-        System.err.println("This is this first thing in punchlist: "+punch);
-        return result;
+    public static int TotalMinutesForPayperiod (ArrayList<Punch> dailypunchlist, Shift shift)
+    {
+        int totalMinutesWorked = 0;
+        int totalWithLunch = 0;
+        int startHours = 0;
+        int startMinute = 0;
+        int stopMinute = 0;
+        int stopHours = 0;
+        boolean pair = false;
+        LocalTime punches;
+        int lunchDuration = (int) shift.getLunchDuration();
+        int calculations = 0;
+        
+        for (Punch punch: dailypunchlist){
+            if (punch.getPunchtype() == PunchType.CLOCK_IN || punch.getPunchtype() == PunchType.CLOCK_OUT){
+                
+                if (punch.getPunchtype() == PunchType.CLOCK_IN){
+                    pair = false;
+                }
+                if (punch.getPunchtype() == PunchType.CLOCK_OUT){
+                    pair = true;
+                }
+            }
+            if (pair == false){
+                punches = punch.getAdjustedTimestamp();
+                startHours = punches.getHour();
+                startMinute = punches.getMinute();
+            }
+            else if (pair){
+               punches = punch.getAdjustedTimestamp();
+                stopHours = punches.getHour();
+                stopMinute = punches.getMinute();
+                totalWithLunch = (( stopHours - startHours) *  + (stopMinute - startMinute));
+                
+                if(totalWithLunch > shift.getLunchthreshold())
+                {
+                    calculations = totalWithLunch - lunchDuration;
+                    totalMinutesWorked = totalMinutesWorked + calculations;
+                }
+                if(totalWithLunch <= shift.getLunchthreshold()){
+                    calculations = ((stopHours - startHours) * 60) + (stopMinute - startMinute);
+                    totalMinutesWorked = totalMinutesWorked + calculations;
+                }
+            }
+        }
+        return totalMinutesWorked;
     }
-
+    public static Double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s){
+       int minutesScheduled = s.getTotalScheduledHours();
+       int minutesWorked = TotalMinutesForPayperiod(punchlist, s);
+       
+       double absenteeism = (100.00 - ((double)(minutesWorked / (double)minutesScheduled)) *100.00);       
+            
+        return absenteeism;
+    }
+    
+    public static String getPunchListPlusTotalsAsJson(ArrayList<Punch> punchlist, Shift s){
+        HashMap<String, String> output = new HashMap<>();
+        String punchListAsJson = getPunchListAsJSON(punchlist);
+        
+        output.put("totalminutes", String.valueOf(calculateAbsenteeism(punchlist, s)));
+        output.put("absenteeism", String.format("%.02f", calculateAbsenteeism(punchlist, s)) + "%");
+        JSONObject obj = (JSONObject) JSONValue.parse(JSONValue.toJSONString(output));
+        obj.put("punchlist", JSONValue.parse(punchListAsJson));
+        
+        return JSONValue.toJSONString(obj);
+    }
+    
 }
