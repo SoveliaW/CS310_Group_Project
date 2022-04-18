@@ -146,23 +146,23 @@ public class TAS {
         int lunchDuration = (int) shift.getLunchDuration();
         int calculations = 0;
         
-        for (Punch punch: dailypunchlist){
-            if (punch.getPunchtype() == PunchType.CLOCK_IN || punch.getPunchtype() == PunchType.CLOCK_OUT){
+        for (Punch p: dailypunchlist){
+            if (p.getPunchtype() == PunchType.CLOCK_IN || p.getPunchtype() == PunchType.CLOCK_OUT){
                 
-                if (punch.getPunchtype() == PunchType.CLOCK_IN){
+                if (p.getPunchtype() == PunchType.CLOCK_IN){
                     pair = false;
                 }
-                if (punch.getPunchtype() == PunchType.CLOCK_OUT){
+                if (p.getPunchtype() == PunchType.CLOCK_OUT){
                     pair = true;
                 }
             }
             if (pair == false){
-                punches = punch.getAdjustedTimestamp();
+                punches = p.getAdjustedTimestamp();
                 startHours = punches.getHour();
                 startMinute = punches.getMinute();
             }
             else if (pair){
-               punches = punch.getAdjustedTimestamp();
+                punches = p.getAdjustedTimestamp();
                 stopHours = punches.getHour();
                 stopMinute = punches.getMinute();
                 totalWithLunch = (( stopHours - startHours) *  + (stopMinute - startMinute));
@@ -172,7 +172,7 @@ public class TAS {
                     calculations = totalWithLunch - lunchDuration;
                     totalMinutesWorked = totalMinutesWorked + calculations;
                 }
-                if(totalWithLunch <= shift.getLunchthreshold()){
+                else if(totalWithLunch <= shift.getLunchthreshold()){
                     calculations = ((stopHours - startHours) * 60) + (stopMinute - startMinute);
                     totalMinutesWorked = totalMinutesWorked + calculations;
                 }

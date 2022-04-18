@@ -29,7 +29,9 @@ public class Shift {
         
         this.lunchmin = java.time.Duration.between(lunchstart,lunchstop).toMinutes();
         TotalScheduledHours = 40;
-        LunchDuration = lunchstop.getMinute() - lunchstart.getMinute();
+        
+        LunchDuration = 30;
+        
     }
 
     public int getLunchDuration() {

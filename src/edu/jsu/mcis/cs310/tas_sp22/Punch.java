@@ -195,9 +195,10 @@ public class Punch {
         adjustedtimestamp = getAdjustedLocalDateTime();
 
     }
-    
+      
     public LocalTime getAdjustedTimestamp(){
         LocalTime adjusted = adjustedtime;
+     
         return adjusted;
     }
     
