@@ -3,9 +3,9 @@ package edu.jsu.mcis.cs310.tas_sp22;
 import java.time.LocalDateTime;
 import java.sql.*;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
@@ -16,7 +16,6 @@ public class Punch {
     private String badgeid, adjustmenttype;
     private LocalDateTime timestamp, adjustedtimestamp;
     private Badge badge;
-    private ArrayList DailyPunchList;
     private LocalTime adjustedtime;
 
 
@@ -28,8 +27,8 @@ public class Punch {
         this.eventtypeid = Integer.parseInt(params.get("eventtypeid"));
         this.punchtypeid = PunchType.values()[Integer.parseInt(params.get("eventtypeid"))];
         this.badge = badge;
-
-        String dayofweek = timestamp.getDayOfWeek().toString();
+        
+        this.adjustedtimestamp = timestamp;
 
     }
 
@@ -41,6 +40,7 @@ public class Punch {
         LocalDateTime local = timestamp1.toLocalDateTime();
         local = local.withSecond(0).withNano(0);
         this.timestamp = local;
+        this.adjustedtimestamp = null;
 
     }
 
@@ -70,7 +70,6 @@ public class Punch {
     }
 
     public PunchType getPunchtype() {
-        punchtypeid = null;
         return punchtypeid;
     }
 
@@ -107,6 +106,7 @@ public class Punch {
         
         if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
             adjustedtime = roundInterval(roundinterval,time);
+            System.err.println("ROUND INTERVAL: " + adjustedtime);
             adjustmenttype = "Interval Round";
         }
         else {
@@ -123,6 +123,7 @@ public class Punch {
                     }
                     else { //Round interval
                         adjustedtime = roundInterval(roundinterval,time);
+                        System.err.println("ROUND INTERVAL: " + adjustedtime);
                         adjustmenttype = "Interval Round";
                     }
                 }
@@ -141,6 +142,7 @@ public class Punch {
                     }
                     else if (timediff >= dockpenalty) {
                         adjustedtime = roundInterval(roundinterval,time);
+                        System.err.println("ROUND INTERVAL: " + adjustedtime);
                         adjustmenttype = "Interval Round";
                     }
                 }
@@ -166,6 +168,7 @@ public class Punch {
                     }
                     else /*if (timediff > roundinterval)*/ { //Round interval
                         adjustedtime = roundInterval(roundinterval,time);
+                        System.err.println("ROUND INTERVAL: " + adjustedtime);
                         adjustmenttype = "Interval Round";
                     }
                 }
@@ -181,6 +184,7 @@ public class Punch {
                     }
                     else if (timediff >= dockpenalty) {
                         adjustedtime = roundInterval(roundinterval,time);
+                        System.err.println("ROUND INTERVAL: " + adjustedtime);
                         adjustmenttype = "Interval Round";
                     }
                 }
@@ -190,10 +194,12 @@ public class Punch {
                     adjustmenttype = "Lunch Start";
                 }
             }
+            
         }
-        
-        adjustedtimestamp = getAdjustedLocalDateTime();
 
+        LocalDate date = adjustedtimestamp.toLocalDate();
+        adjustedtimestamp = LocalDateTime.of(date, adjustedtime);
+        setAdjustedtimestamp(adjustedtimestamp);
     }
       
     public LocalTime getAdjustedTimestamp(){
@@ -203,7 +209,6 @@ public class Punch {
     }
     
     public LocalDateTime getAdjustedLocalDateTime(){
-        adjustedtimestamp = LocalDateTime.of(timestamp.toLocalDate(), adjustedtime); 
         return adjustedtimestamp;
     }
     
@@ -211,6 +216,16 @@ public class Punch {
         return adjustmenttype;
     }
 
+    public void setAdjustedtimestamp(LocalDateTime adjustedtimestamp) {
+        this.adjustedtimestamp = adjustedtimestamp;
+    }
+
+    public void setAdjustedtime(LocalTime adjustedtime) {
+        this.adjustedtime = adjustedtime;
+    }
+
+    
+    
     public String printOriginal() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
 
@@ -223,7 +238,7 @@ public class Punch {
     }
     
     public String printAdjusted() {
-
+        adjustedtimestamp = getAdjustedLocalDateTime();
         
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
 

@@ -21,7 +21,6 @@ public class Absenteeism {
         TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
         this.payperiod = payperiod;
         this.percentage = percentage;
-        
         java.sql.Date payweek = java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY));
         pay_period = payweek.toLocalDate();
     }
@@ -30,35 +29,27 @@ public class Absenteeism {
         return badge;
     }
 
-    public void setBadge(Badge badgeid) {
-        this.badge = badgeid;
-    }
-
     public LocalDate getPayperiod() {
         return payperiod;
-    }
-
-    public void setPayperiod(LocalDate payperiod) {
-        this.payperiod = payperiod;
     }
 
     public double getPercentage() {
         return percentage;
     }
 
-    public void setPercentage(double percentage) {
-        this.percentage = percentage;
-    }
-
     
     @Override
     public String toString(){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        String fs = String.format("%.02f", percentage);
         // #28DC3FB8 (Pay Period Starting 09-02-2018): 2.50%
         StringBuilder s = new StringBuilder();
         
-        s.append("#").append(badge.getId()).append(" (Pay Period Starting ").append(pay_period.format(dtf)).append("): ").append(percentage); 
+        s.append("#").append(badge.getId()).append(" (Pay Period Starting ");
+        s.append(pay_period.format(dtf)).append("): ").append(fs).append("%"); 
         
         return s.toString();
     }
+
+
 }

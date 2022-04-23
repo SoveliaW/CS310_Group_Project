@@ -7,11 +7,13 @@ public class Shift {
     
     private String description;
     private int roundinterval, graceperiod, dockpenalty, lunchthreshold, id, 
-            TotalScheduledHours, LunchDuration;
+            TotalScheduledHours, LunchDuration, scheduledDays;
     private LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
     private long shiftmin, lunchmin;
-       
+    
+
    public Shift(HashMap <String, String> params){
+
       
         this.id = Integer.parseInt(params.get("id"));
         this.description = params.get("description");
@@ -32,6 +34,8 @@ public class Shift {
         
         LunchDuration = 30;
         
+        this.scheduledDays = 5;
+        
     }
 
     public int getLunchDuration() {
@@ -39,6 +43,12 @@ public class Shift {
     }
 
     public int getTotalScheduledHours() {
+        int TotalScheduledHours = 0;
+        
+        for (int i = 0; i < scheduledDays; i++){
+            TotalScheduledHours += (shiftmin - lunchmin);
+        }
+        
         return TotalScheduledHours;
     }
 
@@ -88,6 +98,10 @@ public class Shift {
 
     public long getLunchmin() {
         return lunchmin;
+    }
+
+    public int getScheduledDays() {
+        return scheduledDays;
     }
     
     @Override

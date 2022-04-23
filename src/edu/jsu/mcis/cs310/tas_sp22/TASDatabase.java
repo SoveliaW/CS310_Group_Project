@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.*;
 import java.sql.Date;
+import java.time.DayOfWeek;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
@@ -73,7 +74,8 @@ public class TASDatabase {
         }
         
         return getBadge(badgeid);
-    } 
+    }
+    
    
     public Employee getEmployee(int id) {       
         HashMap<String, String> params = new HashMap<>();
@@ -140,6 +142,7 @@ public class TASDatabase {
         
         return getEmployee(id_int);
     } 
+    
    
     public Punch getPunch(int id) {
         HashMap<String, String> params = new HashMap<>();
@@ -237,6 +240,7 @@ public class TASDatabase {
         
         return key;
     }
+    
             
     public Shift getShift(int id) {       
         HashMap<String, String> params = new HashMap<>();
@@ -303,6 +307,7 @@ public class TASDatabase {
         return getShift(shiftid);
     }
     
+    
     public Department getDepartment(int id) {
         HashMap<String, String> params = new HashMap<>();
         
@@ -333,6 +338,7 @@ public class TASDatabase {
         
         return Results;
     } 
+    
     
     public  ArrayList<Punch> getDailyPunchList(Badge badge, LocalDate date) {
         ArrayList<Punch> DailyPunches = new ArrayList<>();
@@ -385,7 +391,6 @@ public class TASDatabase {
        
         Date payweek = java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY));
         LocalDate pay_week = payweek.toLocalDate();
-        System.err.println("Print the day: " + pay_week);
         
         for (int i = 0; i < 7; i++) {
             LocalDate payperiod_day = pay_week.plusDays(i);
@@ -400,34 +405,28 @@ public class TASDatabase {
     
 
     public Absenteeism getAbsenteeism(Badge badge, LocalDate payperiod){
-        String badgeid = badge.getId();
-        double percentage = 0;
-        TemporalField fieldUS = WeekFields.of(Locale.US).dayOfWeek();
-       
-         System.out.println("Day of the week we are getting"+ java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY)));
+        double percentage = 0.00;
+
         try {
-            String query = "Select * FROM Absenteeism WHERE id = ? AND payperiod = ?";
+            String query = "SELECT * FROM absenteeism WHERE badgeid = ? AND payperiod = ?";
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, badgeid);
-            pstmt.setDate(3, java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY)));
-            System.out.println("Day of the week we are getting"+ java.sql.Date.valueOf(payperiod.with(fieldUS, Calendar.SUNDAY)));
-            boolean ptExe = pstmt.execute();
+            pstmt.setString(1, badge.getId());
+            pstmt.setString(2, String.valueOf(payperiod.with(DayOfWeek.SUNDAY)));
+
+            pstmt.execute();
             
-            if (ptExe) {
-                ResultSet resultset = pstmt.getResultSet();
-                
-                while (resultset.next()){
-                    badgeid = resultset.getString("badgeid");
-                    payperiod = resultset.getDate("payperiod").toLocalDate();
-                    percentage = resultset.getDouble("percentage");
-                }
+            ResultSet resultset = pstmt.executeQuery();
+
+            while (resultset.next()) {
+                percentage = resultset.getDouble("percentage");
             }
+            
         }
+        
         catch (Exception e) { 
             e.printStackTrace();
         }
         
-        badge = getBadge(badgeid);
         Absenteeism result = new Absenteeism(badge, payperiod, percentage);
         
         return result;
@@ -435,41 +434,29 @@ public class TASDatabase {
     
     public int insertAbsenteeism(Absenteeism a){
         int result = 0;
-        int key = 0;
-        ResultSet keys;
         
         String badgeid = a.getBadge().getId();
+        String payperiod = a.getPayperiod().toString();
         double percentage = a.getPercentage();
         
         
-        LocalDate payperiod_ld = a.getPayperiod();
-        String payperiod_s = String.valueOf(payperiod_ld);
-        Date payperiod = Date.valueOf(payperiod_s);
-        
         try{
-            String query = "INSERT INTO absenteeism (badgeid, payperiod, percentage) VALUES (?, ?, ?)";
+            String query = "REPLACE INTO absenteeism (badgeid, payperiod, percentage) VALUES (?, ?, ?)";
            
-            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstmt = connection.prepareStatement(query);
            
             pstmt.setString(1, badgeid);
-            pstmt.setDate(2, payperiod);
+            pstmt.setString(2, payperiod);
             pstmt.setDouble(3, percentage);
            
             result = pstmt.executeUpdate();
-            
-                if (result == 1) {
-                    keys = pstmt.getGeneratedKeys();
-                    
-                    if (keys.next()) { 
-                        key = keys.getInt(1); 
-                    }
-                }
-            }  
+            }
+        
             catch (Exception e){
                 e.printStackTrace(); 
             }
         
-        return key;
+        return result;
     }
     
     
